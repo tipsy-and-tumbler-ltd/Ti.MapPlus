@@ -61,12 +61,15 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	private static final int MSG_ADD_CIRCLE = MSG_FIRST_ID + 921;
 	private static final int MSG_REMOVE_CIRCLE = MSG_FIRST_ID + 922;
 	private static final int MSG_REMOVE_ALL_CIRCLES = MSG_FIRST_ID + 923;
-	private static final int MSG_CHANGE_TILE_PROVIDER = MSG_FIRST_ID + 924;
+	private static final int MSG_ADD_TILEOVERLAY = MSG_FIRST_ID + 924;
+	private static final int MSG_REMOVE_TILEOVERLAY = MSG_FIRST_ID + 925;
+	private static final int MSG_REMOVE_ALL_TILEOVERLAYS = MSG_FIRST_ID + 926;
 
 	private final ArrayList<RouteProxy> preloadRoutes;
 	private final ArrayList<PolygonProxy> preloadPolygons;
 	private final ArrayList<PolylineProxy> preloadPolylines;
 	private final ArrayList<CircleProxy> preloadCircles;
+	private final ArrayList<TileOverlayProxy> preloadTileoverlays;
 
 	public ViewProxy() {
 		super();
@@ -75,6 +78,8 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 		preloadPolygons = new ArrayList<PolygonProxy>();
 		preloadPolylines = new ArrayList<PolylineProxy>();
 		preloadCircles = new ArrayList<CircleProxy>();
+		preloadTileoverlays = new ArrayList<TileOverlayProxy>();
+
 	}
 
 	@Override
@@ -87,6 +92,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 		preloadPolygons.clear();
 		preloadPolylines.clear();
 		preloadCircles.clear();
+		preloadTileoverlays.clear();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -248,6 +254,19 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 			return true;
 		}
 
+		case MSG_ADD_TILEOVERLAY: {
+			result = (AsyncResult) msg.obj;
+			handleAddTileOverlay((TileOverlayProxy) result.getArg());
+			result.setResult(null);
+			return true;
+		}
+
+		case MSG_REMOVE_TILEOVERLAY: {
+			result = (AsyncResult) msg.obj;
+			handleRemoveTileOverlay((TileOverlayProxy) result.getArg());
+			result.setResult(null);
+			return true;
+		}
 		default: {
 			return super.handleMessage(msg);
 		}
@@ -851,6 +870,105 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 			TiMessenger.sendBlockingMainMessage(getMainHandler().obtainMessage(
 					MSG_REMOVE_ALL_POLYLINES));
 		}
+	}
+
+	/* TileOverlays work */
+	@Kroll.method
+	public void addTileOverlay(TileOverlayProxy overlay) {
+
+		if (TiApplication.isUIThread()) {
+			handleAddTileOverlay(overlay);
+		} else {
+			TiMessenger.sendBlockingMainMessage(
+					getMainHandler().obtainMessage(MSG_ADD_TILEOVERLAY),
+					overlay);
+		}
+	}
+
+	public void handleAddTileOverlay(TileOverlayProxy overlay) {
+		if (overlay == null) {
+			return;
+		}
+		TiUIView view = peekView();
+		if (view instanceof TiUIMapView) {
+			TiUIMapView mapView = (TiUIMapView) view;
+			if (mapView.getMap() != null) {
+				mapView.addTileOverlay(overlay);
+			} else {
+				addPreloadTileOverlay(overlay);
+			}
+		} else {
+			addPreloadTileOverlay(overlay);
+		}
+	}
+
+	public void addPreloadTileOverlay(TileOverlayProxy c) {
+		if (!preloadTileoverlays.contains(c)) {
+			preloadTileoverlays.add(c);
+		}
+	}
+
+	public void removePreloadTileOverlay(TileOverlayProxy c) {
+		if (preloadTileoverlays.contains(c)) {
+			preloadTileoverlays.remove(c);
+		}
+	}
+
+	@Kroll.method
+	public void removeTileOverlay(TileOverlayProxy overlay) {
+		if (TiApplication.isUIThread()) {
+			handleRemoveTileOverlay(overlay);
+		} else {
+			TiMessenger.sendBlockingMainMessage(
+					getMainHandler().obtainMessage(MSG_REMOVE_TILEOVERLAY),
+					overlay);
+
+		}
+	}
+
+	public void handleRemoveTileOverlay(TileOverlayProxy overlay) {
+		if (overlay == null) {
+			return;
+		}
+		TiUIView view = peekView();
+		if (view instanceof TiUIMapView) {
+			TiUIMapView mapView = (TiUIMapView) view;
+			if (mapView.getMap() != null) {
+				mapView.removeTileOverlay(overlay);
+			} else {
+				removePreloadTileOverlay(overlay);
+			}
+		} else {
+			removePreloadTileOverlay(overlay);
+		}
+	}
+
+	@Kroll.method
+	public void removeAllTileOverlays() {
+		if (TiApplication.isUIThread()) {
+			handleRemoveAllTileOverlays();
+		} else {
+			TiMessenger.sendBlockingMainMessage(getMainHandler().obtainMessage(
+					MSG_REMOVE_ALL_TILEOVERLAYS));
+		}
+	}
+
+	public void handleRemoveAllTileOverlays() {
+		TiUIView view = peekView();
+		if (view instanceof TiUIMapView) {
+			TiUIMapView mapView = (TiUIMapView) view;
+			if (mapView.getMap() != null) {
+				mapView.removeAllTileOverlays();
+			} else {
+				preloadTileoverlays.clear();
+			}
+		} else {
+			preloadTileoverlays.clear();
+		}
+	}
+
+	public ArrayList<TileOverlayProxy> getPreloadTileOverlay() {
+		return preloadTileoverlays;
 	}
 
 	/**

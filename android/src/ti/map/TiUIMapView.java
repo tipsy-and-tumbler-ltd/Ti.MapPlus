@@ -305,30 +305,6 @@ public class TiUIMapView extends TiUIFragment implements
 		return map;
 	}
 
-	// from:
-	// http://www.survivingwithandroid.com/2015/03/android-google-map-add-weather-data-tile-2.html
-	private TileProvider createTilePovider(String url) {
-		TileProvider tileProvider = new UrlTileProvider(256, 256) {
-			@Override
-			public URL getTileUrl(int x, int y, int zoom) {
-				String fUrl = String.format(url, zoom, x, y);
-				;
-				URL url = null;
-				try {
-					url = new URL(fUrl);
-				} catch (MalformedURLException mfe) {
-					mfe.printStackTrace();
-				}
-
-				return url;
-			}
-		};
-		TileOverlayOptions opts = new TileOverlayOptions();
-		TileOverlay tileOver = map.addTileOverlay(opts);
-		return tileProvider;
-
-	}
-
 	protected void setTileProvider(String url) {
 		if (url != null && url != "") {
 			try {
@@ -701,6 +677,45 @@ public class TiUIMapView extends TiUIFragment implements
 			polylineProxy.setPolyline(null);
 		}
 		currentPolylines.clear();
+	}
+
+	/*
+	 * TileOverlay
+	 */
+	protected void addTileOverlays(Object[] o) {
+		for (int i = 0; i < o.length; i++) {
+			Object obj = o[i];
+			if (obj instanceof TileOverlayProxy) {
+				TileOverlayProxy circle = (TileOverlayProxy) obj;
+				addTileOverlay(o);
+			}
+		}
+	}
+
+	public void addTileOverlay(TileOverlayProxy c) {
+		if (currentTileoverlays.contains(c)) {
+			return;
+		}
+		c.processOptions();
+		c.setTileOverlay(map.addTileOverlay(c.getOptions()));
+		currentTileoverlays.add(c);
+	}
+
+	public void removeTileOverlay(TileOverlayProxy c) {
+		if (!currentTileoverlays.contains(c)) {
+			return;
+		}
+		c.getTileOverlay().remove();
+		c.setTileOverlay(null);
+		currentTileoverlays.remove(c);
+	}
+
+	public void removeAllCircles() {
+		for (CircleProxy circleProxy : currentCircles) {
+			circleProxy.getCircle().remove();
+			circleProxy.setCircle(null);
+		}
+		currentCircles.clear();
 	}
 
 	/**

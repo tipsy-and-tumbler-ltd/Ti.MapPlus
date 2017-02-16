@@ -8,6 +8,7 @@ package ti.map;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiC;
@@ -23,6 +24,7 @@ import android.app.Activity;
 @Kroll.proxy(creatableInModule = MapModule.class, propertyAccessors = { MapModule.PROPERTY_TILE_PROVIDER })
 public class TileOverlayProxy extends ViewProxy {
 	private TileProvider tileProvider;
+	private TileOverlay tileOverlay;
 
 	public TileOverlayProxy() {
 		super();
@@ -47,9 +49,23 @@ public class TileOverlayProxy extends ViewProxy {
 			}
 		};
 		TileOverlayOptions opts = new TileOverlayOptions();
-		TileOverlay tileOver = map.addTileOverlay(opts);
+		// TileOverlay tileOver = map.addTileOverlay(opts);
 		return tileProvider;
 
 	}
 
+	public void processOptions() {
+	}
+
+	public HashMap getOptions() {
+		return new HashMap();
+	}
+
+	public TileOverlay getTileOverlay() {
+		return tileOverlay;
+	}
+
+	public void setTileOverlay(TileOverlay o) {
+
+	}
 }
