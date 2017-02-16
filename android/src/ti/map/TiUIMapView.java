@@ -80,6 +80,7 @@ public class TiUIMapView extends TiUIFragment implements
 	private ArrayList<CircleProxy> currentCircles;
 	private ArrayList<PolygonProxy> currentPolygons;
 	private ArrayList<PolylineProxy> currentPolylines;
+	private ArrayList<TileOverlayProxy> currentTileoverlays;
 
 	public TiUIMapView(final TiViewProxy proxy, Activity activity) {
 		super(proxy, activity);
@@ -686,8 +687,7 @@ public class TiUIMapView extends TiUIFragment implements
 		for (int i = 0; i < o.length; i++) {
 			Object obj = o[i];
 			if (obj instanceof TileOverlayProxy) {
-				TileOverlayProxy circle = (TileOverlayProxy) obj;
-				addTileOverlay(o);
+				addTileOverlay((TileOverlayProxy) obj);
 			}
 		}
 	}
@@ -710,12 +710,12 @@ public class TiUIMapView extends TiUIFragment implements
 		currentTileoverlays.remove(c);
 	}
 
-	public void removeAllCircles() {
-		for (CircleProxy circleProxy : currentCircles) {
-			circleProxy.getCircle().remove();
-			circleProxy.setCircle(null);
+	public void removeAllTileOverlays() {
+		for (TileOverlayProxy tileOverlayProxy : currentTileoverlays) {
+			tileOverlayProxy.getTileOverlay().remove();
+			tileOverlayProxy.setTileOverlay(null);
 		}
-		currentCircles.clear();
+		currentTileoverlays.clear();
 	}
 
 	/**
@@ -1003,6 +1003,7 @@ public class TiUIMapView extends TiUIFragment implements
 		currentCircles = null;
 		currentPolygons = null;
 		currentPolylines = null;
+		currentTileoverlays = null;
 		map = null;
 		timarkers.clear();
 		super.release();
