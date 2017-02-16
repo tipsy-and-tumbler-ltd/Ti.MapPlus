@@ -16,10 +16,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-
-@Kroll.module(name="Map", id="ti.map")
-public class MapModule extends KrollModule
-{
+@Kroll.module(name = "Map", id = "ti.map")
+public class MapModule extends KrollModule {
 	public static final String PROPERTY_DRAGGABLE = "draggable";
 	public static final String PROPERTY_POINTS = "points";
 	public static final String PROPERTY_TRAFFIC = "traffic";
@@ -61,37 +59,76 @@ public class MapModule extends KrollModule
 	public static final String PROPERTY_CENTER = "center";
 	public static final String PROPERTY_RADIUS = "radius";
 
-	@Kroll.constant public static final int NORMAL_TYPE = GoogleMap.MAP_TYPE_NORMAL;
-	@Kroll.constant public static final int TERRAIN_TYPE = GoogleMap.MAP_TYPE_TERRAIN;
-	@Kroll.constant public static final int SATELLITE_TYPE = GoogleMap.MAP_TYPE_SATELLITE;
-	@Kroll.constant public static final int HYBRID_TYPE = GoogleMap.MAP_TYPE_HYBRID;
-	@Kroll.constant public static final int ANNOTATION_DRAG_STATE_START = 0;
-	@Kroll.constant public static final int ANNOTATION_DRAG_STATE_END = 1;
+	public static final String PROPERTY_TILE_PROVIDER = "tileprovider";
 
-	@Kroll.constant public static final int SUCCESS = 0;
-	@Kroll.constant public static final int SERVICE_MISSING = 1;
-	@Kroll.constant public static final int SERVICE_VERSION_UPDATE_REQUIRED = 2;
-	@Kroll.constant public static final int SERVICE_DISABLED = 3;
-	@Kroll.constant public static final int SERVICE_INVALID = 9;
+	@Kroll.constant
+	public static final String OWM_CLOUDS = "http://%d.tile.openweathermap.org/map/clouds/%d/%d/%d.png";
+	@Kroll.constant
+	public static final String OWM_CLOUDS_CLS = "http://tile.openweathermap.org/map/clouds_cls/%d/%d/%d.png";
+	@Kroll.constant
+	public static final String OWM_PRECIPITATION = "http://tile.openweathermap.org/map/precipitation/%d/%d/%d.png";
+	@Kroll.constant
+	public static final String OWM_PRECIPITATION_CLS = "http://tile.openweathermap.org/map/precipitation_cls/%d/%d/%d.png";
+	@Kroll.constant
+	public static final String OWM_RAIN = "http://tile.openweathermap.org/map/rain/%d/%d/%d.png";
+	@Kroll.constant
+	public static final String OWM_PRESSURE = "http://tile.openweathermap.org/map/pressure/%d/%d/%d.png";
+	@Kroll.constant
+	public static final String OWM_WIND = "http://tile.openweathermap.org/map/wind/%d/%d/%d.png";
+	@Kroll.constant
+	public static final int NORMAL_TYPE = GoogleMap.MAP_TYPE_NORMAL;
+	@Kroll.constant
+	public static final int TERRAIN_TYPE = GoogleMap.MAP_TYPE_TERRAIN;
+	@Kroll.constant
+	public static final int SATELLITE_TYPE = GoogleMap.MAP_TYPE_SATELLITE;
+	@Kroll.constant
+	public static final int HYBRID_TYPE = GoogleMap.MAP_TYPE_HYBRID;
+	@Kroll.constant
+	public static final int ANNOTATION_DRAG_STATE_START = 0;
+	@Kroll.constant
+	public static final int ANNOTATION_DRAG_STATE_END = 1;
 
-	@Kroll.constant public static final float ANNOTATION_AZURE = BitmapDescriptorFactory.HUE_AZURE;
-	@Kroll.constant public static final float ANNOTATION_BLUE = BitmapDescriptorFactory.HUE_BLUE;
-	@Kroll.constant public static final float ANNOTATION_CYAN = BitmapDescriptorFactory.HUE_CYAN;
-	@Kroll.constant public static final float ANNOTATION_GREEN = BitmapDescriptorFactory.HUE_GREEN;
-	@Kroll.constant public static final float ANNOTATION_MAGENTA = BitmapDescriptorFactory.HUE_MAGENTA;
-	@Kroll.constant public static final float ANNOTATION_ORANGE = BitmapDescriptorFactory.HUE_ORANGE;
-	@Kroll.constant public static final float ANNOTATION_RED = BitmapDescriptorFactory.HUE_RED;
-	@Kroll.constant public static final float ANNOTATION_ROSE = BitmapDescriptorFactory.HUE_ROSE;
-	@Kroll.constant public static final float ANNOTATION_VIOLET = BitmapDescriptorFactory.HUE_VIOLET;
-	@Kroll.constant public static final float ANNOTATION_YELLOW = BitmapDescriptorFactory.HUE_YELLOW;
+	@Kroll.constant
+	public static final int SUCCESS = 0;
+	@Kroll.constant
+	public static final int SERVICE_MISSING = 1;
+	@Kroll.constant
+	public static final int SERVICE_VERSION_UPDATE_REQUIRED = 2;
+	@Kroll.constant
+	public static final int SERVICE_DISABLED = 3;
+	@Kroll.constant
+	public static final int SERVICE_INVALID = 9;
 
-	public MapModule()
-	{
+	@Kroll.constant
+	public static final float ANNOTATION_AZURE = BitmapDescriptorFactory.HUE_AZURE;
+	@Kroll.constant
+	public static final float ANNOTATION_BLUE = BitmapDescriptorFactory.HUE_BLUE;
+	@Kroll.constant
+	public static final float ANNOTATION_CYAN = BitmapDescriptorFactory.HUE_CYAN;
+	@Kroll.constant
+	public static final float ANNOTATION_GREEN = BitmapDescriptorFactory.HUE_GREEN;
+	@Kroll.constant
+	public static final float ANNOTATION_MAGENTA = BitmapDescriptorFactory.HUE_MAGENTA;
+	@Kroll.constant
+	public static final float ANNOTATION_ORANGE = BitmapDescriptorFactory.HUE_ORANGE;
+	@Kroll.constant
+	public static final float ANNOTATION_RED = BitmapDescriptorFactory.HUE_RED;
+	@Kroll.constant
+	public static final float ANNOTATION_ROSE = BitmapDescriptorFactory.HUE_ROSE;
+	@Kroll.constant
+	public static final float ANNOTATION_VIOLET = BitmapDescriptorFactory.HUE_VIOLET;
+	@Kroll.constant
+	public static final float ANNOTATION_YELLOW = BitmapDescriptorFactory.HUE_YELLOW;
+
+	public MapModule() {
 		super();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Kroll.method
 	public int isGooglePlayServicesAvailable() {
-		return GooglePlayServicesUtil.isGooglePlayServicesAvailable(TiApplication.getAppRootOrCurrentActivity());
+		return GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(TiApplication
+						.getAppRootOrCurrentActivity());
 	}
 }

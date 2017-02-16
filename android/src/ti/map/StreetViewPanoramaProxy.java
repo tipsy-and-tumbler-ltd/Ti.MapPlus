@@ -6,22 +6,30 @@
  */
 package ti.map;
 
-
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.view.TiUIView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.appcelerator.kroll.KrollProxy;
+import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.AsyncResult;
+import org.appcelerator.kroll.common.TiMessenger;
+import org.appcelerator.titanium.TiC;
+import org.appcelerator.titanium.util.TiConvert;
+
+import ti.map.Shape.IShape;
+import android.os.Message;
 
 import android.app.Activity;
 
 @Kroll.proxy(creatableInModule = MapModule.class, propertyAccessors = {
-    TiC.PROPERTY_POSITION,
-    MapModule.PROPERTY_PANNING,
-    MapModule.PROPERTY_ZOOM,
-    MapModule.PROPERTY_STREET_NAMES,
-    MapModule.PROPERTY_USER_NAVIGATION
-})
-public class StreetViewPanoramaProxy extends ViewProxy
-{
+		TiC.PROPERTY_POSITION, MapModule.PROPERTY_PANNING,
+		MapModule.PROPERTY_ZOOM, MapModule.PROPERTY_STREET_NAMES,
+		MapModule.PROPERTY_USER_NAVIGATION })
+public class StreetViewPanoramaProxy extends ViewProxy {
 	public StreetViewPanoramaProxy() {
 		super();
 	}
