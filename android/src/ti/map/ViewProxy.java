@@ -267,6 +267,12 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 			result.setResult(null);
 			return true;
 		}
+		case MSG_REMOVE_ALL_TILEOVERLAYS: {
+			result = (AsyncResult) msg.obj;
+			handleRemoveAllTileOverlays();
+			result.setResult(null);
+			return true;
+		}
 		default: {
 			return super.handleMessage(msg);
 		}
@@ -875,7 +881,6 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	/* TileOverlays work */
 	@Kroll.method
 	public void addTileOverlay(TileOverlayProxy overlay) {
-
 		if (TiApplication.isUIThread()) {
 			handleAddTileOverlay(overlay);
 		} else {

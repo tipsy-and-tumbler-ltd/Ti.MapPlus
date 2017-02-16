@@ -697,7 +697,7 @@ public class TiUIMapView extends TiUIFragment implements
 			return;
 		}
 		c.processOptions();
-		c.setTileOverlay(map.addTileOverlay(c.getOptions()));
+		map.addTileOverlay(c.getOptions());
 		currentTileoverlays.add(c);
 	}
 

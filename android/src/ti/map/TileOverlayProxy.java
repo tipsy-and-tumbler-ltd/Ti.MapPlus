@@ -13,6 +13,7 @@ import java.util.HashMap;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiC;
+import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIView;
 
 import com.google.android.gms.maps.model.Circle;
@@ -29,6 +30,7 @@ public class TileOverlayProxy extends KrollProxy {
 	private TileOverlay tileOverlay;
 	private String endpoint;
 	private TileOverlayOptions opts;
+	private float opacity = 1.0f;
 
 	public TileOverlayProxy() {
 		super();
@@ -53,7 +55,10 @@ public class TileOverlayProxy extends KrollProxy {
 			}
 		};
 		opts = new TileOverlayOptions();
-		// TileOverlay tileOver = map.addTileOverlay(opts);
+		opts.tileProvider(this.tileProvider);
+		opts.transparency(1 - opacity);
+
+		// TileOverlay tileOverlay = map.addTileOverlay(opts);
 		return tileProvider;
 
 	}
@@ -61,6 +66,8 @@ public class TileOverlayProxy extends KrollProxy {
 	public void processOptions() {
 		if (hasProperty(MapModule.PROPERTY_TILE_PROVIDER))
 			endpoint = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
+		if (hasProperty(TiC.PROPERTY_OPACITY))
+			opacity = TiConvert.toFloat(getProperty(TiC.PROPERTY_OPACITY));
 
 	}
 
@@ -73,8 +80,9 @@ public class TileOverlayProxy extends KrollProxy {
 	}
 
 	public void setTileOverlay(TileOverlay o) {
+		createTilePovider();
 		tileOverlay = o;
-
 	}
+	// c.setTileOverlay(map.addTileOverlay(c.getOptions()));
 
 }
