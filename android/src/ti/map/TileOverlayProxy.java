@@ -12,11 +12,14 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import ti.map.TileProviderListProxy;
+
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
+import org.json.JSONException;
 
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -77,16 +80,23 @@ public class TileOverlayProxy extends KrollProxy {
 			Log.e(LCAT, "no tileProvider");
 	}
 
-	public void processOptions() {
+	public void processOptions() throws JSONException {
 		String endpointOfTileProvider = null;
-		if (hasProperty(MapModule.PROPERTY_TILE_PROVIDER))
-			endpointOfTileProvider = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
-		if (hasProperty(TiC.PROPERTY_OPACITY))
+		String provider = "Thunderforest";
+		String variant = "OpenCycleMap";
+		if (hasProperty(TiC.PROPERTY_OPACITY)) {
 			opacity = TiConvert.toFloat(getProperty(TiC.PROPERTY_OPACITY));
-		if (hasProperty(MapModule.PROPERTY_OMW)) {
-			omwtype = TiConvert.toString(getProperty(MapModule.PROPERTY_OMW));
-			endpointOfTileProvider = OMW.replace("omw", omwtype);
 		}
+		TileProviderListProxy providerList = new TileProviderListProxy();
+		if (hasProperty(MapModule.PROPERTY_TILE_PROVIDER)) {
+			provider = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
+		}
+
+		if (hasProperty(MapModule.PROPERTY_TILE_VARIANT)) {
+			variant = TiConvert
+					.toString(getProperty(MapModule.PROPERTY_TILE_VARIANT));
+		}
+		providerList.getUrl(p, v, true);
 		createTileOverlayOptions(endpointOfTileProvider);
 	}
 

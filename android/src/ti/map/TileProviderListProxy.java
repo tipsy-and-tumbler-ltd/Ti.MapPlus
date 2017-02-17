@@ -63,14 +63,58 @@ public class TileProviderListProxy extends KrollProxy {
 	}
 
 	@Kroll.method
+	public String getUrl(String p, String v, boolean randomized)
+			throws JSONException {
+		JSONObject provider;
+		provider = providers.getJSONObject(p);
+		String url = null;
+		if (provider.has("url")) {
+			url = provider.getString("url");
+			if (url.contains("{variant}")) {
+				JSONObject variants = provider.getJSONObject("variants");
+				if (variants.has(v)) {
+					url = url.replace("{variants}", variants.getString(v));
+				}
+			}
+			if (url.contains("{s}")) {
+				url = url.replace("{s}", "");
+				return url;
+			}
+		}
+		return null;
+	}
+
+	@Kroll.method
+	public String getVariant(String p, String v) throws JSONException {
+		JSONObject provider;
+		provider = providers.getJSONObject(p);
+		if (provider.has("variants")) {
+			JSONObject variants = provider.getJSONObject("variants");
+			if (variants.has(v)) {
+				return variants.getString(v);
+			}
+		}
+		return null;
+	}
+
+	@Kroll.method
 	public Object[] getVariantsOfProvider(String p) {
 		ArrayList<String> list = new ArrayList<String>();
-		Iterator<?> keys = providers.keys();
-		while (keys.hasNext()) {
-			String key = (String) keys.next();
+		Iterator<?> pkeys = providers.keys();
+		while (pkeys.hasNext()) {
+			String pkey = (String) pkeys.next();
 			try {
-				if (providers.get(key) instanceof JSONObject) {
-					list.add(key);
+				if (providers.get(pkey) instanceof JSONObject && pkey.equals(p)) {
+					// provider found
+					if (providers.getJSONObject(pkey).has("variants")) {
+						JSONObject variants = providers.getJSONObject(pkey)
+								.getJSONObject("variants");
+						Iterator<?> vkeys = providers.keys();
+						while (vkeys.hasNext()) {
+							String vkey = (String) vkeys.next();
+							list.add(variants.getString(vkey));
+						}
+					}
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();

@@ -60,15 +60,8 @@ public class MapModule extends KrollModule {
 	public static final String PROPERTY_RADIUS = "radius";
 
 	public static final String PROPERTY_TILE_PROVIDER = "tileProvider";
-	public static final String PROPERTY_OMW = "omwType";
-	public static final String PROPERTY_MBTILES = "mbtiles";
+	public static final String PROPERTY_TILE_VARIANT = "variant";
 	public static final String LCAT = "TiMap";
-	@Kroll.constant
-	public static final String OVERLAY_OWM = "http://tile.openweathermap.org/map/{variant}/{z}{x}{y}.png";
-	@Kroll.constant
-	public static final String OVERLAY_MAPNIK = "http://tiles.wmflabs.org/{variant}/{z}/{x}/{y}.png";
-	@Kroll.constant
-	public static final String OPEN_SEA_MAP = "http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png";
 
 	@Kroll.constant
 	public static final int NORMAL_TYPE = GoogleMap.MAP_TYPE_NORMAL;
