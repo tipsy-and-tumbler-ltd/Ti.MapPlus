@@ -95,6 +95,7 @@ public class TileOverlayProxy extends KrollProxy {
 		return tileOverlay;
 	}
 
+	@Kroll.method
 	public void destroy() {
 		if (mbOfflineTileProvider != null) {
 			mbOfflineTileProvider.close();
