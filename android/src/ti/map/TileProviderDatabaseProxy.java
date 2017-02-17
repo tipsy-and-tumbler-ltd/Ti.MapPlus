@@ -38,7 +38,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-@Kroll.proxy(name = "TileProviderList", creatableInModule = MapModule.class)
+@Kroll.proxy(name = "TileProviderDatabase", creatableInModule = MapModule.class)
 public class TileProviderDatabaseProxy extends KrollProxy {
 	JSONObject providers = null;
 	final String LCAT = MapModule.LCAT;
@@ -150,14 +150,13 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 			String pkey = (String) pkeys.next();
 			try {
 				if (providers.get(pkey) instanceof JSONObject && pkey.equals(p)) {
-					// provider found
 					if (providers.getJSONObject(pkey).has("variants")) {
 						JSONObject variants = providers.getJSONObject(pkey)
 								.getJSONObject("variants");
-						Iterator<?> vkeys = providers.keys();
+						Iterator<?> vkeys = variants.keys();
 						while (vkeys.hasNext()) {
 							String vkey = (String) vkeys.next();
-							list.add(variants.getString(vkey));
+							list.add(vkey);
 						}
 					}
 				}
