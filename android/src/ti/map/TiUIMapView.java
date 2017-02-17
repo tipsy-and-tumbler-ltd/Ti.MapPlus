@@ -697,7 +697,7 @@ public class TiUIMapView extends TiUIFragment implements
 			return;
 		}
 		c.processOptions();
-		map.addTileOverlay(c.getOptions());
+		c.setTileOverlay(map.addTileOverlay(c.getOptions()));
 		currentTileoverlays.add(c);
 	}
 
@@ -736,6 +736,7 @@ public class TiUIMapView extends TiUIFragment implements
 			return;
 		}
 		c.processOptions();
+
 		c.setCircle(map.addCircle(c.getOptions()));
 		currentCircles.add(c);
 	}

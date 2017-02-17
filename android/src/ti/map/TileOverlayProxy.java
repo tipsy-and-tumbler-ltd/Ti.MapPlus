@@ -43,14 +43,12 @@ public class TileOverlayProxy extends KrollProxy {
 			@Override
 			public URL getTileUrl(int x, int y, int zoom) {
 				String fUrl = String.format(endpoint, zoom, x, y);
-				;
 				URL url = null;
 				try {
 					url = new URL(fUrl);
-				} catch (MalformedURLException mfe) {
-					mfe.printStackTrace();
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
 				}
-
 				return url;
 			}
 		};
@@ -68,6 +66,7 @@ public class TileOverlayProxy extends KrollProxy {
 			endpoint = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
 		if (hasProperty(TiC.PROPERTY_OPACITY))
 			opacity = TiConvert.toFloat(getProperty(TiC.PROPERTY_OPACITY));
+		createTilePovider();
 
 	}
 
@@ -80,7 +79,7 @@ public class TileOverlayProxy extends KrollProxy {
 	}
 
 	public void setTileOverlay(TileOverlay o) {
-		createTilePovider();
+
 		tileOverlay = o;
 	}
 	// c.setTileOverlay(map.addTileOverlay(c.getOptions()));

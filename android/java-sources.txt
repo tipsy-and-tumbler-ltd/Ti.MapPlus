@@ -1,3 +1,4 @@
+"/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/build/generated/java/ti/map/MapBootstrap.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/src/ti/map/AnnotationProxy.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/src/ti/map/CircleProxy.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/src/ti/map/MapModule.java"
