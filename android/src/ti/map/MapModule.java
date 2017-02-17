@@ -84,6 +84,8 @@ public class MapModule extends KrollModule {
 	@Kroll.constant
 	public static final int HYBRID_TYPE = GoogleMap.MAP_TYPE_HYBRID;
 	@Kroll.constant
+	public static final int NONE_TYPE = GoogleMap.MAP_TYPE_NONE;
+	@Kroll.constant
 	public static final int ANNOTATION_DRAG_STATE_START = 0;
 	@Kroll.constant
 	public static final int ANNOTATION_DRAG_STATE_END = 1;
