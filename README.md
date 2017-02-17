@@ -17,4 +17,12 @@ mapView.addTileOverlay(weatherOverlay);
 Other constants are `OWM_PRECIPITATION`, `OWM_RAIN`, `OWM_WIND`, `OWM_PRESSURE`
 Additiona you can use every tile url from [leaflet providers](http://leaflet-extras.github.io/leaflet-providers/).
 
-With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downloadosmtiles.pl) you can download all tiles from a region. This script generates folders and download all. After this you can use [mbutil](https://github.com/mapbox/mbutil/) for converting in mbtiles format. This sqlite format is basic for offline maps.
+With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downloadosmtiles.pl) you can download all tiles from a region. This script generates folders and download all. After this you can use [mbutil](https://github.com/mapbox/mbutil/) for converting in mbtiles format. This sqlite format is basic for offline maps. Now you can call:
+```javascript
+
+var offlineOverlay =  map.createTileOverlay({
+    mbtiles : Ti.Filesysten.getFile(Ti.Filesystem.applicationDataDirectory,"mbtiles","hamburg").nativPath,
+});
+mapView.addOverlay(offlineOverlay);
+```
+
