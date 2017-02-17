@@ -46,7 +46,7 @@ public class TileOverlayProxy extends KrollProxy {
 				public URL getTileUrl(int x, int y, int zoom) {
 					String fUrl = endpointOfTileProvider
 							.replace("{z}", "" + zoom).replace("{x}", "" + x)
-							.replace("{y}", "" + y);
+							.replace("{y}", "" + y).replace("{s}", "");
 					URL url = null;
 					try {
 						url = new URL(fUrl);
@@ -84,7 +84,6 @@ public class TileOverlayProxy extends KrollProxy {
 			endpointOfTileProvider = OMW.replace("omw", omwtype);
 		}
 		createTileOverlayOptions(endpointOfTileProvider);
-
 	}
 
 	public TileOverlayOptions getOptions() {
