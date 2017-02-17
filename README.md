@@ -9,12 +9,22 @@ This is a fork for supporting TileOverlays.
 var map = require("ti.map");
 var mapView = map.createView();
 var weatherOverlay =  map.createTileOverlay({
-    tileProvider : map.OVERLAY_OWM,
-    variant : "clouds"
+    tileProvider : "OpenWeatherMap",
+    variant : "RainClassic"
     opacity:0.7
 });
 mapView.addTileOverlay(weatherOverlay);
 ```
+
+For retreiving all possible variants of TileProviders and variants:
+```javascript
+var providerList = map.createTileProviderList();
+providerList.getAllProviders();  // gives list of all
+var variants = providerList.getVariantsOfProvider("Stamen");  // gives list of all variants
+console.log(variants);
+// gives Toner, TonerBackground, TonerHybrid, TonerLines, TonerLabels, TonerLite, Watercolor
+```
+
 Additiona you can use every tile url from [leaflet providers](http://leaflet-extras.github.io/leaflet-providers/).
 
 With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downloadosmtiles.pl) you can download all tiles from a region. This script generates folders and download all. After this you can use [mbutil](https://github.com/mapbox/mbutil/) for converting in mbtiles format. This sqlite format is basic for offline maps. Now you can call:
