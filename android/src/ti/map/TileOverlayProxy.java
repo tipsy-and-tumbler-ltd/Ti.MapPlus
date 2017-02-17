@@ -6,23 +6,20 @@
  */
 package ti.map;
 
+import com.cocoahero.android.gmaps.addons.mapbox.MapBoxOfflineTileProvider;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
-import org.appcelerator.titanium.view.TiUIView;
 
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
-
-import android.app.Activity;
 
 @Kroll.proxy(creatableInModule = MapModule.class, propertyAccessors = { MapModule.PROPERTY_TILE_PROVIDER })
 public class TileOverlayProxy extends KrollProxy {
@@ -63,6 +60,25 @@ public class TileOverlayProxy extends KrollProxy {
 		// TileOverlay tileOverlay = map.addTileOverlay(opts);
 		return tileProvider;
 
+	}
+
+	private void mbtiles(String mbtilesFilename) {
+		// Create new TileOverlayOptions instance.
+		TileOverlayOptions opts = new TileOverlayOptions();
+
+		// Get a File reference to the MBTiles file.
+		File myMBTiles = new File(mbtilesFilename);
+
+		// Create an instance of MapBoxOfflineTileProvider.
+		MapBoxOfflineTileProvider provider = new MapBoxOfflineTileProvider(
+				myMBTiles);
+
+		// Set the tile provider on the TileOverlayOptions.
+		opts.tileProvider(provider);
+
+		// Sometime later when the map view is destroyed, close the provider.
+		// This is important to prevent a leak of the backing SQLiteDatabase.
+		provider.close();
 	}
 
 	public void processOptions() {
