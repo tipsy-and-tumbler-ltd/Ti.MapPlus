@@ -96,7 +96,7 @@ public class TileOverlayProxy extends KrollProxy {
 			variant = TiConvert
 					.toString(getProperty(MapModule.PROPERTY_TILE_VARIANT));
 		}
-		providerList.getUrl(p, v, true);
+		providerList.getUrl(provider, variant, true);
 		createTileOverlayOptions(endpointOfTileProvider);
 	}
 
