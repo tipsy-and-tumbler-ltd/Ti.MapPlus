@@ -3,3 +3,16 @@
 This is the Map Module for Titanium. Please use [JIRA](http://jira.appcelerator.org) to report issues or ask our [TiSlack community](http://tislack.org) for help! :rocket:
 
 This is a fork for supporting TileOverlays. 
+
+##Usage
+```javascript
+var map = require("ti.map");
+var mapView = map.createView();
+var weatherOverlay =  map.createTileOverlay({
+    url : map.OWM_CLOUDS,
+    opacity:0.7
+})
+mapView.addTileOverlay(weatherOverlay);
+```
+Other constants are `OWM_PRECIPITATION`, `OWM_RAIN`, `OWM_WIND`, `OWM_PRESSURE`
+Additiona you can use every tile url from [leaflet providers](http://leaflet-extras.github.io/leaflet-providers/).
