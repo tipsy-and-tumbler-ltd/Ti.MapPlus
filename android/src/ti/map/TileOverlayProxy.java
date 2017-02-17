@@ -12,7 +12,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import ti.map.TileProviderListProxy;
+import ti.map.TileProviderDatabaseProxy;
 
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
@@ -80,14 +80,14 @@ public class TileOverlayProxy extends KrollProxy {
 			Log.e(LCAT, "no tileProvider");
 	}
 
-	public void processOptions() throws JSONException {
+	public void processOptions() {
 		String endpointOfTileProvider = null;
 		String provider = "Thunderforest";
 		String variant = "OpenCycleMap";
 		if (hasProperty(TiC.PROPERTY_OPACITY)) {
 			opacity = TiConvert.toFloat(getProperty(TiC.PROPERTY_OPACITY));
 		}
-		TileProviderListProxy providerList = new TileProviderListProxy();
+		TileProviderDatabaseProxy providerList = new TileProviderDatabaseProxy();
 		if (hasProperty(MapModule.PROPERTY_TILE_PROVIDER)) {
 			provider = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
 		}

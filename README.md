@@ -19,7 +19,7 @@ mapView.addTileOverlay(weatherOverlay);
 ### Exploring database of TileProviders
 For retreiving all possible variants of TileProviders and variants:
 ```javascript
-var providerList = map.createTileProviderList();
+var providerList = map.createTileProviderDatabase();
 providerList.getAllProviders();  // gives list of all
 var variants = providerList.getVariantsOfProvider("Stamen");  // gives list of all variants
 console.log(variants);
