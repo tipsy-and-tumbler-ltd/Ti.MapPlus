@@ -21,7 +21,7 @@ With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downl
 ```javascript
 
 var offlineOverlay =  map.createTileOverlay({
-    mbtiles : Ti.Filesysten.getFile(Ti.Filesystem.applicationDataDirectory,"mbtiles","hamburg").nativPath,
+    tileProvider : Ti.Filesysten.getFile(Ti.Filesystem.applicationDataDirectory,"mbtiles","hamburg").nativPath,
 });
 mapView.addOverlay(offlineOverlay);
 ```

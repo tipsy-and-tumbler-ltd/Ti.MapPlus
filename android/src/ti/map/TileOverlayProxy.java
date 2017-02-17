@@ -23,74 +23,67 @@ import com.google.android.gms.maps.model.UrlTileProvider;
 
 @Kroll.proxy(creatableInModule = MapModule.class, propertyAccessors = { MapModule.PROPERTY_TILE_PROVIDER })
 public class TileOverlayProxy extends KrollProxy {
-	private TileProvider tileProvider;
+
 	private TileOverlay tileOverlay;
-	private String endpoint;
 	private TileOverlayOptions opts;
 	private float opacity = 1.0f;
 	private final String OMW = "http://tile.openweathermap.org/map/{omw}/{z}{x}{y}.png";
 	private String omwtype = "cloud";
+	MapBoxOfflineTileProvider mbOfflineTileProvider;
 
 	public TileOverlayProxy() {
 		super();
+		opts = new TileOverlayOptions();
 	}
 
 	// from:
 	// http://www.survivingwithandroid.com/2015/03/android-google-map-add-weather-data-tile-2.html
-	private TileProvider createTilePovider() {
-		TileProvider tileProvider = new UrlTileProvider(256, 256) {
-			@Override
-			public URL getTileUrl(int x, int y, int zoom) {
-				String fUrl = endpoint.replace("{z}", "" + zoom)
-						.replace("{x}", "" + x).replace("{y}", "" + y);
-				// String.format(endpoint, zoom, x, y);
-				URL url = null;
-				try {
-					url = new URL(fUrl);
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
+	private void createTileOverlayOptions(final String endpointOfTileProvider) {
+		TileProvider tileProvider = null;
+		if (endpointOfTileProvider.substring(0, 4).equals("http")) {
+			tileProvider = new UrlTileProvider(256, 256) {
+				@Override
+				public URL getTileUrl(int x, int y, int zoom) {
+					String fUrl = endpointOfTileProvider
+							.replace("{z}", "" + zoom).replace("{x}", "" + x)
+							.replace("{y}", "" + y);
+					URL url = null;
+					try {
+						url = new URL(fUrl);
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					}
+					return url;
 				}
-				return url;
-			}
-		};
-		opts = new TileOverlayOptions();
-		opts.tileProvider(this.tileProvider);
+			};
+
+		} else if (endpointOfTileProvider.substring(0, 4).equals("file")) {
+			File myMBTiles = new File(endpointOfTileProvider.replace("file://",
+					""));
+			MapBoxOfflineTileProvider mbOfflineTileProvider = new MapBoxOfflineTileProvider(
+					myMBTiles);
+			opts.tileProvider(mbOfflineTileProvider);
+			// Sometime later when the map view is destroyed, close the
+			// provider.
+			// This is important to prevent a leak of the backing
+			// SQLiteDatabase.
+			// provider.close(); // TODO
+		}
+		opts.tileProvider(tileProvider);
 		opts.transparency(1 - opacity);
-
-		// TileOverlay tileOverlay = map.addTileOverlay(opts);
-		return tileProvider;
-
-	}
-
-	private void mbtiles(String mbtilesFilename) {
-		// Create new TileOverlayOptions instance.
-		TileOverlayOptions opts = new TileOverlayOptions();
-
-		// Get a File reference to the MBTiles file.
-		File myMBTiles = new File(mbtilesFilename);
-
-		// Create an instance of MapBoxOfflineTileProvider.
-		MapBoxOfflineTileProvider provider = new MapBoxOfflineTileProvider(
-				myMBTiles);
-
-		// Set the tile provider on the TileOverlayOptions.
-		opts.tileProvider(provider);
-
-		// Sometime later when the map view is destroyed, close the provider.
-		// This is important to prevent a leak of the backing SQLiteDatabase.
-		provider.close();
 	}
 
 	public void processOptions() {
+		String endpointOfTileProvider = null;
 		if (hasProperty(MapModule.PROPERTY_TILE_PROVIDER))
-			endpoint = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
+			endpointOfTileProvider = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
 		if (hasProperty(TiC.PROPERTY_OPACITY))
 			opacity = TiConvert.toFloat(getProperty(TiC.PROPERTY_OPACITY));
 		if (hasProperty(MapModule.PROPERTY_OMW)) {
 			omwtype = TiConvert.toString(getProperty(MapModule.PROPERTY_OMW));
-			endpoint = OMW.replace("omw", omwtype);
+			endpointOfTileProvider = OMW.replace("omw", omwtype);
 		}
-		createTilePovider();
+		createTileOverlayOptions(endpointOfTileProvider);
 
 	}
 
@@ -102,10 +95,14 @@ public class TileOverlayProxy extends KrollProxy {
 		return tileOverlay;
 	}
 
-	public void setTileOverlay(TileOverlay o) {
-
-		tileOverlay = o;
+	public void destroy() {
+		if (mbOfflineTileProvider != null) {
+			mbOfflineTileProvider.close();
+		}
 	}
-	// c.setTileOverlay(map.addTileOverlay(c.getOptions()));
+
+	public void setTileOverlay(TileOverlay tileOverlay) {
+		this.tileOverlay = tileOverlay;
+	}
 
 }
