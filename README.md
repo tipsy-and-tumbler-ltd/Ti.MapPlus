@@ -5,6 +5,7 @@ This is the Map Module for Titanium. Please use [JIRA](http://jira.appcelerator.
 This is a fork for supporting TileOverlays. 
 
 ##Usage
+### Using of TileOverlays
 ```javascript
 var map = require("ti.map");
 var mapView = map.createView();
@@ -15,7 +16,7 @@ var weatherOverlay =  map.createTileOverlay({
 });
 mapView.addTileOverlay(weatherOverlay);
 ```
-
+### Exploring database of TileProviders
 For retreiving all possible variants of TileProviders and variants:
 ```javascript
 var providerList = map.createTileProviderList();
@@ -25,7 +26,7 @@ console.log(variants);
 // gives Toner, TonerBackground, TonerHybrid, TonerLines, TonerLabels, TonerLite, Watercolor
 ```
 
-Additiona you can use every tile url from [leaflet providers](http://leaflet-extras.github.io/leaflet-providers/).
+### Offline tiles
 
 With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downloadosmtiles.pl) you can download all tiles from a region. This script generates folders and download all. After this you can use [mbutil](https://github.com/mapbox/mbutil/) for converting in mbtiles format. This sqlite format is basic for offline maps. Now you can call:
 ```javascript
