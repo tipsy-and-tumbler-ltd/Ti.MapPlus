@@ -42,7 +42,9 @@ public class TileOverlayProxy extends KrollProxy {
 		TileProvider tileProvider = new UrlTileProvider(256, 256) {
 			@Override
 			public URL getTileUrl(int x, int y, int zoom) {
-				String fUrl = String.format(endpoint, zoom, x, y);
+				String fUrl = endpoint.replace("{z}", "" + zoom)
+						.replace("{x}", "" + x).replace("{y}", "" + y);
+				// String.format(endpoint, zoom, x, y);
 				URL url = null;
 				try {
 					url = new URL(fUrl);
