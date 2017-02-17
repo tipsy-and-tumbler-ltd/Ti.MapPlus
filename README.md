@@ -9,9 +9,9 @@ This is a fork for supporting TileOverlays.
 var map = require("ti.map");
 var mapView = map.createView();
 var weatherOverlay =  map.createTileOverlay({
-    url : map.OWM_CLOUDS,
+    tileProvider : map.OWM_CLOUDS,
     opacity:0.7
-})
+});
 mapView.addTileOverlay(weatherOverlay);
 ```
 Other constants are `OWM_PRECIPITATION`, `OWM_RAIN`, `OWM_WIND`, `OWM_PRESSURE`

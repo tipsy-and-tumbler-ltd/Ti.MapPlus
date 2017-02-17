@@ -31,6 +31,8 @@ public class TileOverlayProxy extends KrollProxy {
 	private String endpoint;
 	private TileOverlayOptions opts;
 	private float opacity = 1.0f;
+	private final String OMW = "http://tile.openweathermap.org/map/{omw}/{z}{x}{y}.png";
+	private String omwtype = "cloud";
 
 	public TileOverlayProxy() {
 		super();
@@ -68,6 +70,10 @@ public class TileOverlayProxy extends KrollProxy {
 			endpoint = (String) getProperty(MapModule.PROPERTY_TILE_PROVIDER);
 		if (hasProperty(TiC.PROPERTY_OPACITY))
 			opacity = TiConvert.toFloat(getProperty(TiC.PROPERTY_OPACITY));
+		if (hasProperty(MapModule.PROPERTY_OMW)) {
+			omwtype = TiConvert.toString(getProperty(MapModule.PROPERTY_OMW));
+			endpoint = OMW.replace("omw", omwtype);
+		}
 		createTilePovider();
 
 	}

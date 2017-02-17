@@ -59,7 +59,9 @@ public class MapModule extends KrollModule {
 	public static final String PROPERTY_CENTER = "center";
 	public static final String PROPERTY_RADIUS = "radius";
 
-	public static final String PROPERTY_TILE_PROVIDER = "tileprovider";
+	public static final String PROPERTY_TILE_PROVIDER = "tileProvider";
+	public static final String PROPERTY_OMW = "omwType";
+	public static final String PROPERTY_MBTILES = "mbtiles";
 
 	@Kroll.constant
 	public static final String OWM_CLOUDS = "http://%d.tile.openweathermap.org/map/clouds/{z}{x}{y}.png";
