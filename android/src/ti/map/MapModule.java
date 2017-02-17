@@ -62,21 +62,14 @@ public class MapModule extends KrollModule {
 	public static final String PROPERTY_TILE_PROVIDER = "tileProvider";
 	public static final String PROPERTY_OMW = "omwType";
 	public static final String PROPERTY_MBTILES = "mbtiles";
+	public static final String LCAT = "TiMap";
+	@Kroll.constant
+	public static final String OVERLAY_OWM = "http://tile.openweathermap.org/map/{variant}/{z}{x}{y}.png";
+	@Kroll.constant
+	public static final String OVERLAY_MAPNIK = "http://tiles.wmflabs.org/{variant}/{z}/{x}/{y}.png";
+	@Kroll.constant
+	public static final String OPEN_SEA_MAP = "http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png";
 
-	@Kroll.constant
-	public static final String OWM_CLOUDS = "http://%d.tile.openweathermap.org/map/clouds/{z}{x}{y}.png";
-	@Kroll.constant
-	public static final String OWM_CLOUDS_CLS = "http://tile.openweathermap.org/map/clouds_cls/{z}{x}{y}.png";
-	@Kroll.constant
-	public static final String OWM_PRECIPITATION = "http://tile.openweathermap.org/map/precipitation/{z}{x}{y}.png";
-	@Kroll.constant
-	public static final String OWM_PRECIPITATION_CLS = "http://tile.openweathermap.org/map/precipitation_cls/{z}{x}{y}.png";
-	@Kroll.constant
-	public static final String OWM_RAIN = "http://tile.openweathermap.org/map/rain/{z}{x}{y}.png";
-	@Kroll.constant
-	public static final String OWM_PRESSURE = "http://tile.openweathermap.org/map/pressure/{z}{x}{y}.png";
-	@Kroll.constant
-	public static final String OWM_WIND = "http://tile.openweathermap.org/map/wind/{z}{x}{y}.png";
 	@Kroll.constant
 	public static final int NORMAL_TYPE = GoogleMap.MAP_TYPE_NORMAL;
 	@Kroll.constant

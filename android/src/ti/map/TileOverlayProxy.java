@@ -7,12 +7,14 @@
 package ti.map;
 
 import com.cocoahero.android.gmaps.addons.mapbox.MapBoxOfflineTileProvider;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
 
@@ -27,6 +29,7 @@ public class TileOverlayProxy extends KrollProxy {
 	private TileOverlay tileOverlay;
 	private TileOverlayOptions opts;
 	private float opacity = 1.0f;
+	public String LCAT = MapModule.LCAT;
 	private final String OMW = "http://tile.openweathermap.org/map/{omw}/{z}{x}{y}.png";
 	private String omwtype = "cloud";
 	MapBoxOfflineTileProvider mbOfflineTileProvider;
@@ -58,19 +61,20 @@ public class TileOverlayProxy extends KrollProxy {
 			};
 
 		} else if (endpointOfTileProvider.substring(0, 4).equals("file")) {
-			File myMBTiles = new File(endpointOfTileProvider.replace("file://",
-					""));
-			MapBoxOfflineTileProvider mbOfflineTileProvider = new MapBoxOfflineTileProvider(
-					myMBTiles);
-			opts.tileProvider(mbOfflineTileProvider);
-			// Sometime later when the map view is destroyed, close the
-			// provider.
-			// This is important to prevent a leak of the backing
-			// SQLiteDatabase.
-			// provider.close(); // TODO
+			File mbtilesFile = new File(endpointOfTileProvider.replace(
+					"file://", ""));
+			if (mbtilesFile.exists()) {
+				MapBoxOfflineTileProvider mbOfflineTileProvider = new MapBoxOfflineTileProvider(
+						mbtilesFile);
+				opts.tileProvider(mbOfflineTileProvider);
+			} else
+				Log.e("LCAT", "mb file not found " + mbtilesFile);
 		}
-		opts.tileProvider(tileProvider);
-		opts.transparency(1 - opacity);
+		if (tileProvider != null) {
+			opts.tileProvider(tileProvider);
+			opts.transparency(1 - opacity);
+		} else
+			Log.e(LCAT, "no tileProvider");
 	}
 
 	public void processOptions() {
