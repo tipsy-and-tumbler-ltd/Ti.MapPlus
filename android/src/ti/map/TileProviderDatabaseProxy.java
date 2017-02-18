@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
@@ -95,37 +96,6 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public String getUrl(String p, String v, boolean randomized) {
-		if (providers == null)
-			return null;
-		try {
-			JSONObject provider;
-
-			provider = providers.getJSONObject(p);
-
-			String url = null;
-			if (provider.has("url")) {
-				url = provider.getString("url");
-				if (url.contains("{variant}")) {
-					JSONObject variants = provider.getJSONObject("variants");
-					if (variants.has(v)) {
-						url = url.replace("{variants}", variants.getString(v));
-					}
-				}
-				if (url.contains("{s}")) {
-					url = url.replace("{s}", "");
-					return url;
-				}
-			}
-			return null;
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Kroll.method
 	public String getVariant(String p, String v) throws JSONException {
 		if (providers == null)
 			return null;
@@ -167,12 +137,71 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 		return list.toArray();
 	}
 
+	private String shuffle(String input) {
+		List<Character> characters = new ArrayList<Character>();
+		for (char c : input.toCharArray()) {
+			characters.add(c);
+		}
+		StringBuilder output = new StringBuilder(input.length());
+		while (characters.size() != 0) {
+			int randPicker = (int) (Math.random() * characters.size());
+			output.append(characters.remove(randPicker));
+		}
+		return output.toString();
+	}
+
 	@Kroll.method
-	public String getEndpoint(String provider, String variant) {
+	public String getEndpoint(String p, String v, boolean randomized) {
 		if (providers == null)
 			return null;
 		String endpoint = null;
+		if (providers.has(p)) {
+			try {
+				String ext = "";
+				String subdomains = null;
+				JSONObject provider = providers.getJSONObject(p);
+				endpoint = provider.getString("url");
+				if (provider.has("options")) {
+					JSONObject options = provider.getJSONObject("options");
+					if (options.has("ext"))
+						ext = options.getString("ext");
+					if (options.has("subdomains")) {
+						subdomains = options.getString("subdomains");
+						Log.d(LCAT, subdomains);
+					}
+				}
+				if (provider.has("variants")) {
+					JSONObject variants = provider.getJSONObject("variants");
+					Iterator<?> vkeys = variants.keys();
+					while (vkeys.hasNext()) {
+						String vkey = (String) vkeys.next();
+						if (vkey.equals(v)) {
+							Object variantO = variants.get(v);
+							if (variantO instanceof String) {
+								endpoint = endpoint.replace("{variant}",
+										(String) variantO);
+							}
+							if (variantO instanceof JSONObject) {
+								JSONObject options = ((JSONObject) variantO)
+										.getJSONObject("options");
+								String variant = options.getString("variant");
+								if (options.has("ext"))
+									ext = options.getString("ext");
+								endpoint = endpoint.replace("{variant}",
+										variant).replace("{ext}", ext);
+								if (subdomains != null)
+									endpoint = endpoint
+											.replace("{s}", shuffle(subdomains)
+													.substring(0, 1));
+							}
+
+						}
+					}
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
 		return endpoint;
 	}
-
 }

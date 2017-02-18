@@ -64,6 +64,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	private static final int MSG_ADD_TILEOVERLAY = MSG_FIRST_ID + 924;
 	private static final int MSG_REMOVE_TILEOVERLAY = MSG_FIRST_ID + 925;
 	private static final int MSG_REMOVE_ALL_TILEOVERLAYS = MSG_FIRST_ID + 926;
+	private String LCAT = MapModule.LCAT;
 
 	private final ArrayList<RouteProxy> preloadRoutes;
 	private final ArrayList<PolygonProxy> preloadPolygons;
@@ -256,6 +257,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 
 		case MSG_ADD_TILEOVERLAY: {
 			result = (AsyncResult) msg.obj;
+			Log.d(LCAT, "addTileOverlay in receiver");
 			handleAddTileOverlay((TileOverlayProxy) result.getArg());
 			result.setResult(null);
 			return true;
@@ -882,8 +884,10 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	@Kroll.method
 	public void addTileOverlay(TileOverlayProxy overlay) {
 		if (TiApplication.isUIThread()) {
+			Log.d(LCAT, "addTileOverlay in UIThread");
 			handleAddTileOverlay(overlay);
 		} else {
+			Log.d(LCAT, "addTileOverlay sendTo");
 			TiMessenger.sendBlockingMainMessage(
 					getMainHandler().obtainMessage(MSG_ADD_TILEOVERLAY),
 					overlay);
@@ -892,6 +896,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 
 	public void handleAddTileOverlay(TileOverlayProxy overlay) {
 		if (overlay == null) {
+			Log.w(LCAT, "handleAddTileOverlay overlay null");
 			return;
 		}
 		TiUIView view = peekView();
@@ -903,6 +908,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 				addPreloadTileOverlay(overlay);
 			}
 		} else {
+			Log.w(LCAT, "handleAddTileOverlay not instance");
 			addPreloadTileOverlay(overlay);
 		}
 	}

@@ -1,6 +1,6 @@
 {
 	"OpenStreetMap": {
-		"url": "//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+		"url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 		"options": {
 			"maxZoom": 19,
 			"attribution": "© <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>"
@@ -19,14 +19,14 @@
 				}
 			},
 			"France": {
-				"url": "//{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+				"url": "http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
 				"options": {
 					"maxZoom": 20,
 					"attribution": "© Openstreetmap France | {attribution.OpenStreetMap}"
 				}
 			},
 			"HOT": {
-				"url": "//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+				"url": "http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
 				"options": {
 					"attribution": "{attribution.OpenStreetMap}, Tiles courtesy of <a href=\"http://hot.openstreetmap.org/\">Humanitarian OpenStreetMap Team</a>"
 				}
@@ -40,14 +40,14 @@
 		}
 	},
 	"OpenTopoMap": {
-		"url": "//{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+		"url": "http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
 		"options": {
 			"maxZoom": 17,
 			"attribution": "Map data: {\"attribution\".OpenStreetMap}, <a href=\"http://viewfinderpanoramas.org\">SRTM</a> | Map style: © <a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)"
 		}
 	},
 	"Thunderforest": {
-		"url": "//{s}.tile.thunderforest.com/{variant}/{z}/{x}/{y}.png?apikey={apikey}",
+		"url": "http://{s}.tile.thunderforest.com/{variant}/{z}/{x}/{y}.png?apikey={apikey}",
 		"options": {
 			"attribution": "© <a href=\"http://www.thunderforest.com/\">Thunderforest</a>, {attribution.OpenStreetMap}",
 			"variant": "cycle"
@@ -101,7 +101,7 @@
 		}
 	},
 	"Hydda": {
-		"url": "//{s}.tile.openstreetmap.se/hydda/{variant}/{z}/{x}/{y}.png",
+		"url": "http://{s}.tile.openstreetmap.se/hydda/{variant}/{z}/{x}/{y}.png",
 		"options": {
 			"variant": "full",
 			"attribution": "Tiles courtesy of <a href=\"http://openstreetmap.se/\">OpenStreetMap Sweden</a> – Map data {attribution.OpenStreetMap}"
@@ -113,14 +113,14 @@
 		}
 	},
 	"MapBox": {
-		"url": "//api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
+		"url": "http://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
 		"options": {
 			"attribution": "Imagery from <a href=\"http://mapbox.com/about/maps/\">MapBox</a> – Map data {attribution.OpenStreetMap}",
 			"subdomains": "abcd"
 		}
 	},
 	"Stamen": {
-		"url": "//stamen-tiles-{s}.a.ssl.fastly.net/{variant}/{z}/{x}/{y}.{ext}",
+		"url": "http://stamen-tiles-{s}.a.ssl.fastly.net/{variant}/{z}/{x}/{y}.{ext}",
 		"options": {
 			"attribution": "Map tiles by <a href=\"http://stamen.com\">Stamen Design</a>, <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a> – Map data {attribution.OpenStreetMap}",
 			"subdomains": "abcd",
@@ -180,7 +180,7 @@
 		}
 	},
 	"Esri": {
-		"url": "//server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}",
+		"url": "http://server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}",
 		"options": {
 			"variant": "World_Street_Map",
 			"attribution": "Tiles © Esri"
@@ -367,7 +367,7 @@
 		}
 	},
 	"NASAGIBS": {
-		"url": "//map1.vis.earthdata.nasa.gov/wmts-webmerc/{variant}/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}",
+		"url": "http://map1.vis.earthdata.nasa.gov/wmts-webmerc/{variant}/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}",
 		"options": {
 			"attribution": "Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href=\"https://earthdata.nasa.gov\">ESDIS</a>) with funding provided by NASA/HQ.",
 			"bounds": [

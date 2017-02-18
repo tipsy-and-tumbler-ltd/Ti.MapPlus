@@ -71,6 +71,7 @@ public class TiUIMapView extends TiUIFragment implements
 
 	private static final String TAG = "TiUIMapView";
 	private GoogleMap map;
+	private String LCAT = MapModule.LCAT;
 	protected boolean animate = false;
 	protected boolean preLayout = true;
 	protected LatLngBounds preLayoutUpdateBounds;
@@ -692,13 +693,15 @@ public class TiUIMapView extends TiUIFragment implements
 		}
 	}
 
-	public void addTileOverlay(TileOverlayProxy c) {
-		if (currentTileoverlays.contains(c)) {
+	public void addTileOverlay(TileOverlayProxy tileOverlayProxy) {
+		if (currentTileoverlays.contains(tileOverlayProxy)) {
+			Log.w(LCAT, "overlay always added");
 			return;
 		}
-		c.processOptions();
-		c.setTileOverlay(map.addTileOverlay(c.getOptions()));
-		currentTileoverlays.add(c);
+		Log.w(LCAT, "addTileOverlay");
+		tileOverlayProxy.setTileOverlay(map.addTileOverlay(tileOverlayProxy
+				.getOptions()));
+		currentTileoverlays.add(tileOverlayProxy);
 	}
 
 	public void removeTileOverlay(TileOverlayProxy c) {
