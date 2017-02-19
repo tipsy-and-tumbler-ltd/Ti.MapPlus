@@ -68,6 +68,7 @@ public class TiUIMapView extends TiUIFragment implements
 	private ArrayList<PolygonProxy> currentPolygons;
 	private ArrayList<PolylineProxy> currentPolylines;
 	private ArrayList<TileOverlayProxy> currentTileoverlays;
+	private ArrayList<HeatmapOverlayProxy> currentHeatmapoverlays;
 
 	public TiUIMapView(final TiViewProxy proxy, Activity activity) {
 		super(proxy, activity);
@@ -76,6 +77,7 @@ public class TiUIMapView extends TiUIFragment implements
 		currentPolygons = new ArrayList<PolygonProxy>();
 		currentPolylines = new ArrayList<PolylineProxy>();
 		currentTileoverlays = new ArrayList<TileOverlayProxy>();
+		currentHeatmapoverlays = new ArrayList<HeatmapOverlayProxy>();
 	}
 
 	/**
@@ -690,6 +692,41 @@ public class TiUIMapView extends TiUIFragment implements
 			tileOverlayProxy.setTileOverlay(null);
 		}
 		currentTileoverlays.clear();
+	}
+
+	/* heatmap */
+	protected void addHeatmapOverlays(Object[] o) {
+		for (int i = 0; i < o.length; i++) {
+			Object obj = o[i];
+			if (obj instanceof HeatmapOverlayProxy) {
+				addHeatmapOverlay((HeatmapOverlayProxy) obj);
+			}
+		}
+	}
+
+	public void addHeatmapOverlay(HeatmapOverlayProxy p) {
+		if (currentHeatmapoverlays.contains(p)) {
+			return;
+		}
+		map.addTileOverlay(p.getOptions());
+		currentHeatmapoverlays.add(p);
+	}
+
+	public void removeHeatmapOverlay(HeatmapOverlayProxy c) {
+		if (!currentHeatmapoverlays.contains(c)) {
+			return;
+		}
+		// c.getHeatmapOverlay().remove();
+		// c.setHeatmapOverlay(null);
+		// currentHeatmapoverlays.remove(c);
+	}
+
+	public void removeAllHeatmapOverlays() {
+		for (HeatmapOverlayProxy tileOverlayProxy : currentHeatmapoverlays) {
+			// tileOverlayProxy.getHeatmapOverlay().remove();
+			// tileOverlayProxy.setHeatmapOverlay(null);
+		}
+		currentHeatmapoverlays.clear();
 	}
 
 	/**

@@ -17,9 +17,11 @@ import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.maps.android.heatmaps.Gradient;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.Gradient;
+
 // from: https://github.com/googlemaps/android-maps-utils
-import com.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 @Kroll.proxy(creatableInModule = MapModule.class)
 public class HeatmapOverlayProxy extends KrollProxy {
@@ -34,11 +36,6 @@ public class HeatmapOverlayProxy extends KrollProxy {
 
 	public HeatmapOverlayProxy() {
 		super();
-	}
-
-	private void addHeatMap() {
-		heatmapTileProvider = new HeatmapTileProvider.Builder().data(pointList)
-				.opacity(opacity).radius(radius).gradient(gradient).build();
 	}
 
 	private void addLocation(Object loc, ArrayList<LatLng> locationArray) {
@@ -81,5 +78,11 @@ public class HeatmapOverlayProxy extends KrollProxy {
 		if (o.containsKeyAndNotNull(MapModule.PROPERTY_POINTS)) {
 			pointList = processPoints(getProperty(MapModule.PROPERTY_POINTS));
 		}
+	}
+
+	public TileOverlayOptions getOptions() {
+		heatmapTileProvider = new HeatmapTileProvider.Builder().data(pointList)
+				.opacity(opacity).radius(radius).gradient(gradient).build();
+		return new TileOverlayOptions().tileProvider(heatmapTileProvider);
 	}
 }
