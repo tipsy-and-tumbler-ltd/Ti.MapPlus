@@ -32,9 +32,7 @@ import android.os.Message;
 		MapModule.PROPERTY_TILE_PROVIDER })
 public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	private static final String TAG = "MapViewProxy";
-
 	private static final int MSG_FIRST_ID = TiViewProxy.MSG_LAST_ID + 1;
-
 	private static final int MSG_ADD_ANNOTATION = MSG_FIRST_ID + 500;
 	private static final int MSG_ADD_ANNOTATIONS = MSG_FIRST_ID + 501;
 	private static final int MSG_REMOVE_ANNOTATION = MSG_FIRST_ID + 502;
@@ -257,7 +255,6 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 
 		case MSG_ADD_TILEOVERLAY: {
 			result = (AsyncResult) msg.obj;
-			Log.d(LCAT, "addTileOverlay in receiver");
 			handleAddTileOverlay((TileOverlayProxy) result.getArg());
 			result.setResult(null);
 			return true;
@@ -883,11 +880,10 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	/* TileOverlays work */
 	@Kroll.method
 	public void addTileOverlay(TileOverlayProxy overlay) {
+
 		if (TiApplication.isUIThread()) {
-			Log.d(LCAT, "addTileOverlay in UIThread");
 			handleAddTileOverlay(overlay);
 		} else {
-			Log.d(LCAT, "addTileOverlay sendTo");
 			TiMessenger.sendBlockingMainMessage(
 					getMainHandler().obtainMessage(MSG_ADD_TILEOVERLAY),
 					overlay);
@@ -898,7 +894,13 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 		if (o == null) {
 			return;
 		}
-		TileOverlayProxy overlay = (TileOverlayProxy) o;
+		TileOverlayProxy overlay = null;
+		if (o instanceof TileOverlayProxy) {
+			overlay = (TileOverlayProxy) o;
+		} else {
+			Log.e(LCAT, "is not TileOverlay");
+			return;
+		}
 		TiUIView view = peekView();
 		if (view instanceof TiUIMapView) {
 			TiUIMapView mapView = (TiUIMapView) view;
