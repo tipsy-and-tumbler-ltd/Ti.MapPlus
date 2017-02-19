@@ -898,7 +898,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 		if (o instanceof TileOverlayProxy) {
 			overlay = (TileOverlayProxy) o;
 		} else {
-			Log.e(LCAT, "is not TileOverlay");
+			Log.e(LCAT, "parameter isn't a TileOverlay " + o.toString());
 			return;
 		}
 		TiUIView view = peekView();
