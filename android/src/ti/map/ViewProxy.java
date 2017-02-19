@@ -880,7 +880,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	/* TileOverlays work */
 	@Kroll.method
 	public void addTileOverlay(TileOverlayProxy overlay) {
-
+		Log.d(LCAT, "KroLl: " + peekView().toString());
 		if (TiApplication.isUIThread()) {
 			handleAddTileOverlay(overlay);
 		} else {
@@ -891,6 +891,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	}
 
 	public void handleAddTileOverlay(Object o) {
+		Log.d(LCAT, "handleAddTileOverlay: " + peekView().toString());
 		if (o == null) {
 			return;
 		}

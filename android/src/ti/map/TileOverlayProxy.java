@@ -53,9 +53,14 @@ public class TileOverlayProxy extends KrollProxy {
 		if (o.containsKeyAndNotNull(MapModule.PROPERTY_TILE_VARIANT)) {
 			variant = o.getString(MapModule.PROPERTY_TILE_VARIANT);
 		}
-		TileProviderDatabaseProxy providerList = new TileProviderDatabaseProxy();
-		endpointOfTileProvider = providerList.getEndpoint(provider, variant,
-				true);
+		if (o.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
+			endpointOfTileProvider = o.getString(TiC.PROPERTY_URL);
+		}
+		if (endpointOfTileProvider == null) {
+			TileProviderDatabaseProxy providerList = new TileProviderDatabaseProxy();
+			endpointOfTileProvider = providerList.getEndpoint(provider,
+					variant, true);
+		}
 		getTileOverlayOptions(endpointOfTileProvider);
 	}
 
@@ -102,26 +107,6 @@ public class TileOverlayProxy extends KrollProxy {
 			Log.e(LCAT, "no tileProvider available");
 			return null;
 		}
-	}
-
-	public void processOptions() {
-		return;
-		/*
-		 * String endpointOfTileProvider = null; String provider =
-		 * "Thunderforest"; String variant = "OpenCycleMap"; if
-		 * (hasProperty(TiC.PROPERTY_OPACITY)) { opacity =
-		 * TiConvert.toFloat(getProperty(TiC.PROPERTY_OPACITY)); }
-		 * TileProviderDatabaseProxy providerList = new
-		 * TileProviderDatabaseProxy(); if
-		 * (hasProperty(MapModule.PROPERTY_TILE_PROVIDER)) { provider = (String)
-		 * getProperty(MapModule.PROPERTY_TILE_PROVIDER); }
-		 * 
-		 * if (hasProperty(MapModule.PROPERTY_TILE_VARIANT)) { variant =
-		 * TiConvert .toString(getProperty(MapModule.PROPERTY_TILE_VARIANT)); }
-		 * tileOverlayOptions = getTileOverlayOptions(providerList.getEndpoint(
-		 * provider, variant, true)); Log.d(LCAT,
-		 * tileOverlayOptions.toString());
-		 */
 	}
 
 	public TileOverlayOptions getOptions() {

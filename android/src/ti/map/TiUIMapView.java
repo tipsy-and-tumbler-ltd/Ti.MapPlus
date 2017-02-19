@@ -669,10 +669,8 @@ public class TiUIMapView extends TiUIFragment implements
 
 	public void addTileOverlay(TileOverlayProxy p) {
 		if (currentTileoverlays.contains(p)) {
-			Log.w(LCAT, "overlay always added");
 			return;
 		}
-		Log.w(LCAT, "addTileOverlay");
 		p.setTileOverlay(map.addTileOverlay(p.getOptions()));
 		currentTileoverlays.add(p);
 	}

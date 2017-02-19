@@ -3,6 +3,7 @@
 		"url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 		"options": {
 			"maxZoom": 19,
+			"subdomains" : "abc",
 			"attribution": "© <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>"
 		},
 		"variants": {
