@@ -1,13 +1,12 @@
 # Titanium Map Module [![Build Status](https://travis-ci.org/appcelerator-modules/ti.map.svg)](https://travis-ci.org/appcelerator-modules/ti.map)
 
-This is the Map Module for Titanium. Please use [JIRA](http://jira.appcelerator.org) to report issues or ask our [TiSlack community](http://tislack.org) for help! :rocket:
-
-This is a fork for supporting TileOverlays. 
-
-<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112425.png" width=200 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112805.png" width=200 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-114755.png" width=200 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/osmsea.png" width=200 />
+This is the Map Module for Titanium extended by TileOverlays. 
 
 
-Screenshot_20170219-115509.png
+<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112425.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112805.png" width=400 /> 
+<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-114755.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/osmsea.png" width=400 />
+
+
 ##Usage
 ### Using of TileOverlays
 ```javascript
