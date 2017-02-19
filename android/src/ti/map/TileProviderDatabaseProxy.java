@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.AsyncResult;
@@ -202,5 +203,25 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 			}
 		}
 		return endpoint;
+	}
+
+	public KrollDict getXYZfromLatLng(KrollDict position) {
+		double lat = 0f;
+		double lng = 0f;
+		int zoom = 0;
+		KrollDict kd = new KrollDict();
+		if (position.containsKeyAndNotNull("lat")) {
+			lat = position.getDouble("lat");
+			kd.put("y",
+					(Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1
+							/ Math.cos(lat * Math.PI / 180))
+							/ Math.PI)
+							/ 2 * Math.pow(2, zoom))));
+			kd.put("x", (Math.floor((lng + 180) / 360 * Math.pow(2, zoom))));
+		}
+		if (position.containsKeyAndNotNull("lng")) {
+			lng = position.getDouble("lng");
+		}
+		return kd;
 	}
 }
