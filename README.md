@@ -65,6 +65,7 @@ This prevent memory leaks!
 
 ##Heatmaps
 
+<img src="https://i.stack.imgur.com/FkVco.jpg" width=400 />
 ```javascript
 var heatMap  = map.createHeatmapOverlay({
     points : [
@@ -83,4 +84,5 @@ var heatMap  = map.createHeatmapOverlay({
 mapView.addHeatmapOverlay(heatMap);
 heatMap.setPoints(/* new data */);
 ```
+
 
