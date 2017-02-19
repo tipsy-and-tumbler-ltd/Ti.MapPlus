@@ -10,19 +10,6 @@ package ti.map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.TileOverlay;
-import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.TileProvider;
-import com.google.android.gms.maps.model.UrlTileProvider;
-
-import android.support.v4.app.Fragment;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.common.Log;
@@ -36,6 +23,7 @@ import ti.map.Shape.Boundary;
 import ti.map.Shape.IShape;
 import ti.map.Shape.PolylineBoundary;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -46,7 +34,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.res.Resources;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,9 +45,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.Marker;
 
 public class TiUIMapView extends TiUIFragment implements
 		GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener,
@@ -89,6 +75,7 @@ public class TiUIMapView extends TiUIFragment implements
 		currentCircles = new ArrayList<CircleProxy>();
 		currentPolygons = new ArrayList<PolygonProxy>();
 		currentPolylines = new ArrayList<PolylineProxy>();
+		currentTileoverlays = new ArrayList<TileOverlayProxy>();
 	}
 
 	/**
@@ -263,9 +250,6 @@ public class TiUIMapView extends TiUIFragment implements
 		if (d.containsKey(TiC.PROPERTY_STYLE)) {
 			setStyle(d.getString(TiC.PROPERTY_STYLE));
 		}
-		if (d.containsKey(MapModule.PROPERTY_TILE_PROVIDER)) {
-			setTileProvider(d.getString(MapModule.PROPERTY_TILE_PROVIDER));
-		}
 	}
 
 	@Override
@@ -305,16 +289,6 @@ public class TiUIMapView extends TiUIFragment implements
 
 	public GoogleMap getMap() {
 		return map;
-	}
-
-	protected void setTileProvider(String url) {
-		if (url != null && url != "") {
-			try {
-
-			} catch (Resources.NotFoundException e) {
-
-			}
-		}
 	}
 
 	protected void setStyle(String style) {
@@ -693,15 +667,14 @@ public class TiUIMapView extends TiUIFragment implements
 		}
 	}
 
-	public void addTileOverlay(TileOverlayProxy tileOverlayProxy) {
-		if (currentTileoverlays.contains(tileOverlayProxy)) {
+	public void addTileOverlay(TileOverlayProxy p) {
+		if (currentTileoverlays.contains(p)) {
 			Log.w(LCAT, "overlay always added");
 			return;
 		}
 		Log.w(LCAT, "addTileOverlay");
-		tileOverlayProxy.setTileOverlay(map.addTileOverlay(tileOverlayProxy
-				.getOptions()));
-		currentTileoverlays.add(tileOverlayProxy);
+		p.setTileOverlay(map.addTileOverlay(p.getOptions()));
+		currentTileoverlays.add(p);
 	}
 
 	public void removeTileOverlay(TileOverlayProxy c) {

@@ -894,28 +894,29 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 		}
 	}
 
-	public void handleAddTileOverlay(TileOverlayProxy overlay) {
-		if (overlay == null) {
-			Log.w(LCAT, "handleAddTileOverlay overlay null");
+	public void handleAddTileOverlay(Object o) {
+		if (o == null) {
 			return;
 		}
+		TileOverlayProxy overlay = (TileOverlayProxy) o;
 		TiUIView view = peekView();
 		if (view instanceof TiUIMapView) {
 			TiUIMapView mapView = (TiUIMapView) view;
 			if (mapView.getMap() != null) {
+				Log.d(LCAT, "mapView.addTileOverlay(overlay)");
 				mapView.addTileOverlay(overlay);
 			} else {
 				addPreloadTileOverlay(overlay);
 			}
 		} else {
-			Log.w(LCAT, "handleAddTileOverlay not instance");
+			Log.w(LCAT, "peekView() !=> TiUIMapView ");
 			addPreloadTileOverlay(overlay);
 		}
 	}
 
-	public void addPreloadTileOverlay(TileOverlayProxy c) {
-		if (!preloadTileoverlays.contains(c)) {
-			preloadTileoverlays.add(c);
+	public void addPreloadTileOverlay(TileOverlayProxy p) {
+		if (!preloadTileoverlays.contains(p)) {
+			preloadTileoverlays.add(p);
 		}
 	}
 
