@@ -46,3 +46,24 @@ offlineOverlay.destroy();
 ```
 This prevent memory leaks!
 
+##Heatmaps
+
+```javascript
+var heatMap  = map.createHeatmapOverlay({
+    points : [
+        {"lat" : -37.1886, "lng" : 145.708 } ,
+        {"lat" : -37.8361, "lng" : 144.845 } ,
+        {"lat" : -38.4034, "lng" : 144.192 } ,
+        {"lat" : -38.7597, "lng" : 143.67 } ,
+        {"lat" : -36.9672, "lng" : 141.083 }
+        ],
+    opacity : 0.9,
+    gradient : {
+        colors : ["#ff0000","#0000ff"],
+        startPoints : [0.2,1.0]
+    }
+});
+mapView.addHeatmapOverlay(heatMap);
+heatMap.setPoints(/* new data */);
+```
+
