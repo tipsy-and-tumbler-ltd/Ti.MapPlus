@@ -29,6 +29,23 @@ console.log(variants);
 // gives Toner, TonerBackground, TonerHybrid, TonerLines, TonerLabels, TonerLite, Watercolor
 ```
 
+### Getting static tiles
+```javascript
+
+Ti.UI.createImageView({
+    width : 256,
+    height : 256,
+    image : map.getTileUrl({
+        tileProvider : "Stamen",
+        variant : "WaterColor"
+        lat : 53.55,
+        lng : 10.01,
+        zoom : 12
+    })
+});
+
+```
+
 ### Offline tiles
 
 With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downloadosmtiles.pl) you can download all tiles from a region. This script generates folders and download all. After this you can use [mbutil](https://github.com/mapbox/mbutil/) for converting in mbtiles format. This sqlite format is basic for offline maps. Now you can call:
