@@ -205,6 +205,7 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 		return endpoint;
 	}
 
+	@Kroll.method
 	public KrollDict getXYZfromLatLng(KrollDict position) {
 		double lat = 0f;
 		double lng = 0f;
@@ -212,6 +213,7 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 		KrollDict kd = new KrollDict();
 		if (position.containsKeyAndNotNull("lat")) {
 			lat = position.getDouble("lat");
+			kd.put("z", zoom);
 			kd.put("y",
 					(Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1
 							/ Math.cos(lat * Math.PI / 180))
@@ -223,5 +225,21 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 			lng = position.getDouble("lng");
 		}
 		return kd;
+	}
+
+	@Kroll.method
+	public String getTileUrl(KrollDict opts) {
+		double lat = 0f;
+		double lng = 0f;
+		int zoom = 0;
+		String url = getEndpoint(opts.getString("tileProvider"),
+				opts.getString("variant"), true);
+		KrollDict params = new KrollDict();
+		params.put("tileProvider", opts.get("tileProvider"));
+		params.put("variants", opts.get("variant"));
+		KrollDict xyz = getXYZfromLatLng(params);
+		return url.replace("{x}", "" + xyz.getString("x"))
+				.replace("{y}", "" + xyz.getString("y"))
+				.replace("{z}", "" + xyz.getString("z"));
 	}
 }
