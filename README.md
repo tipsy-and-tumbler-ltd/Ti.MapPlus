@@ -3,7 +3,7 @@
 This is the Map Module for Titanium extended by TileOverlays. 
 
 
-<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112425.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112805.png" width=400 /> 
+<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/watercolor.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112805.png" width=400 /> 
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-114755.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/osmsea.png" width=400 />
 
 
