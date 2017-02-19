@@ -167,7 +167,6 @@ public class TileProviderDatabaseProxy extends KrollProxy {
 						ext = options.getString("ext");
 					if (options.has("subdomains")) {
 						subdomains = options.getString("subdomains");
-						Log.d(LCAT, subdomains);
 					}
 				}
 				if (provider.has("variants")) {

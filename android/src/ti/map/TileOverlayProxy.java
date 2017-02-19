@@ -33,6 +33,8 @@ public class TileOverlayProxy extends KrollProxy {
 				String endpointOfTileProvider) {
 			super(arg0, arg1);
 			this.endpointOfTileProvider = endpointOfTileProvider;
+			Log.d(LCAT, "Endoint:\n====================\n"
+					+ endpointOfTileProvider);
 		}
 
 		@Override
