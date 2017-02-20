@@ -41,11 +41,11 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
 @Kroll.proxy(name = "TileProviderDatabase", creatableInModule = MapModule.class)
-public class TileProviderDatabaseProxy extends KrollProxy {
+public class TileProviderFactoryProxy extends KrollProxy {
 	JSONObject providers = null;
 	final String LCAT = MapModule.LCAT;
 
-	public TileProviderDatabaseProxy() {
+	public TileProviderFactoryProxy() {
 		super();
 		final String asset = "assets/TileProvider";
 		ClassLoader classLoader = getClass().getClassLoader();

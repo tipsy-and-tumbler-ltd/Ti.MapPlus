@@ -87,7 +87,7 @@ public class TileOverlayProxy extends KrollProxy {
 			endpointOfTileProvider = o.getString(TiC.PROPERTY_URL);
 		}
 		if (endpointOfTileProvider == null) {
-			TileProviderDatabaseProxy providerList = new TileProviderDatabaseProxy();
+			TileProviderFactoryProxy providerList = new TileProviderFactoryProxy();
 			endpointOfTileProvider = providerList.getEndpoint(provider,
 					variant, true);
 		}
