@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
@@ -40,9 +41,9 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-@Kroll.proxy(name = "TileProviderDatabase", creatableInModule = MapModule.class)
+@Kroll.proxy(name = "TileProviderFactory", creatableInModule = MapModule.class)
 public class TileProviderFactoryProxy extends KrollProxy {
-	JSONObject providers = null;
+	JSONObject Providers = null;
 	final String LCAT = MapModule.LCAT;
 
 	public TileProviderFactoryProxy() {
@@ -54,54 +55,46 @@ public class TileProviderFactoryProxy extends KrollProxy {
 			byte[] buffer = new byte[in.available()];
 			in.read(buffer);
 			in.close();
-			String json = new String(buffer, "UTF-8");
-			providers = new JSONObject(json);
+			Providers = new JSONObject(new String(buffer, "UTF-8"));
+			Map<String, TileProvider> providerList = new HashMap<String, TileProvider>();
+			for (String providerName : getAllProviders()) {
+				providerList
+						.put(providerName,
+								new TileProvider(Providers
+										.getJSONObject(providerName)));
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private String loadJSONFromAsset(String asset) {
-		String json = null;
-		try {
-			InputStream inStream = TiFileFactory.createTitaniumFile(
-					new String[] { asset }, false).getInputStream();
-			byte[] buffer = new byte[inStream.available()];
-			inStream.read(buffer);
-			inStream.close();
-			json = new String(buffer, "UTF-8");
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-		return json;
-	}
-
 	@Kroll.method
-	public Object[] getAllProviders() {
-		if (providers == null)
+	public String[] getAllProviders() {
+		if (Providers == null)
 			return null;
 		ArrayList<String> list = new ArrayList<String>();
-		Iterator<?> keys = providers.keys();
+		Iterator<?> keys = Providers.keys();
 		while (keys.hasNext()) {
 			String key = (String) keys.next();
 			try {
-				if (providers.get(key) instanceof JSONObject) {
+				if (Providers.get(key) instanceof JSONObject) {
 					list.add(key);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-		return list.toArray();
+
+		return list.toArray(new String[list.size()]);
 	}
 
 	@Kroll.method
 	public String getVariant(String p, String v) throws JSONException {
-		if (providers == null)
+		if (Providers == null)
 			return null;
 		JSONObject provider;
-		provider = providers.getJSONObject(p);
+		provider = Providers.getJSONObject(p);
 		if (provider.has("variants")) {
 			JSONObject variants = provider.getJSONObject("variants");
 			if (variants.has(v)) {
@@ -113,16 +106,16 @@ public class TileProviderFactoryProxy extends KrollProxy {
 
 	@Kroll.method
 	public Object[] getVariantsOfProvider(String p) {
-		if (providers == null)
+		if (Providers == null)
 			return null;
 		ArrayList<String> list = new ArrayList<String>();
-		Iterator<?> pkeys = providers.keys();
+		Iterator<?> pkeys = Providers.keys();
 		while (pkeys.hasNext()) {
 			String pkey = (String) pkeys.next();
 			try {
-				if (providers.get(pkey) instanceof JSONObject && pkey.equals(p)) {
-					if (providers.getJSONObject(pkey).has("variants")) {
-						JSONObject variants = providers.getJSONObject(pkey)
+				if (Providers.get(pkey) instanceof JSONObject && pkey.equals(p)) {
+					if (Providers.getJSONObject(pkey).has("variants")) {
+						JSONObject variants = Providers.getJSONObject(pkey)
 								.getJSONObject("variants");
 						Iterator<?> vkeys = variants.keys();
 						while (vkeys.hasNext()) {
@@ -153,14 +146,14 @@ public class TileProviderFactoryProxy extends KrollProxy {
 
 	@Kroll.method
 	public String getEndpoint(String p, String v, boolean randomized) {
-		if (providers == null)
+		if (Providers == null)
 			return null;
 		String endpoint = null;
-		if (providers.has(p)) {
+		if (Providers.has(p)) {
 			try {
 				String ext = "";
 				String subdomains = null;
-				JSONObject provider = providers.getJSONObject(p);
+				JSONObject provider = Providers.getJSONObject(p);
 				endpoint = provider.getString("url");
 				if (provider.has("options")) {
 					JSONObject options = provider.getJSONObject("options");
@@ -241,5 +234,21 @@ public class TileProviderFactoryProxy extends KrollProxy {
 		return url.replace("{x}", "" + xyz.getString("x"))
 				.replace("{y}", "" + xyz.getString("y"))
 				.replace("{z}", "" + xyz.getString("z"));
+	}
+
+	private String loadJSONFromAsset(String asset) {
+		String json = null;
+		try {
+			InputStream inStream = TiFileFactory.createTitaniumFile(
+					new String[] { asset }, false).getInputStream();
+			byte[] buffer = new byte[inStream.available()];
+			inStream.read(buffer);
+			inStream.close();
+			json = new String(buffer, "UTF-8");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+		return json;
 	}
 }
