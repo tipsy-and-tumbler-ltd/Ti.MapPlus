@@ -39,7 +39,7 @@ var variant = factory.getVariant("Stamen","WaterColor");
 Ti.UI.createImageView({
     width : 256,
     height : 256,
-    image : map.getTileUrl({
+    image : map.getTileImage({
         tileProvider : "Stamen/WaterColor"
         lat : 53.55,
         lng : 10.01,

@@ -116,41 +116,39 @@ public class TileProviderFactoryProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public KrollDict getXYZfromLatLng(KrollDict position) {
+	public String getTileImage(KrollDict position) {
 		double lat = 0f;
 		double lng = 0f;
+		int x = 0;
+		int y = 0;
+		String tileProvider;
 		int zoom = 0;
 		KrollDict kd = new KrollDict();
-		if (position.containsKeyAndNotNull("lat")) {
-			lat = position.getDouble("lat");
-			kd.put("z", zoom);
-			kd.put("y",
-					(Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1
-							/ Math.cos(lat * Math.PI / 180))
-							/ Math.PI)
-							/ 2 * Math.pow(2, zoom))));
-			kd.put("x", (Math.floor((lng + 180) / 360 * Math.pow(2, zoom))));
-		}
-		if (position.containsKeyAndNotNull("lng")) {
-			lng = position.getDouble("lng");
-		}
-		return kd;
-	}
+		KrollDict variant = new KrollDict();
+		if (position.containsKeyAndNotNull("tileProvider")) {
+			String endpoint = position.getString("tileProvider");
+			if (endpoint.contains("/")) {
+				String[] pair = endpoint.split("/");
+				variant = providerList.get(pair[0]).getVariant(pair[1]);
 
-	@Kroll.method
-	public String getTileUrl(KrollDict opts) {
-		double lat = 0f;
-		double lng = 0f;
-		int zoom = 0;
-		String url = "";// getEndpoint(opts.getString("tileProvider"),
-		// opts.getString("variant"), true);
-		KrollDict params = new KrollDict();
-		params.put("tileProvider", opts.get("tileProvider"));
-		params.put("variants", opts.get("variant"));
-		KrollDict xyz = getXYZfromLatLng(params);
-		return url.replace("{x}", "" + xyz.getString("x"))
-				.replace("{y}", "" + xyz.getString("y"))
-				.replace("{z}", "" + xyz.getString("z"));
+			} else {
+				variant = providerList.get(endpoint).getVariant(null);
+			}
+
+		}
+		if (position.containsKeyAndNotNull("lat")
+				&& position.containsKeyAndNotNull("lng")) {
+			lat = position.getDouble("lat");
+			lng = position.getDouble("lat");
+			zoom = position.getInt("zoom");
+			y = (int) (Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180)
+					+ 1 / Math.cos(lat * Math.PI / 180))
+					/ Math.PI)
+					/ 2 * Math.pow(2, zoom)));
+			x = (int) (Math.floor((lng + 180) / 360 * Math.pow(2, zoom)));
+		}
+		return variant.getString("endpoint").replace("{x}", "" + x)
+				.replace("{y}", "" + y).replace("{z}", "" + zoom);
 	}
 
 	private String loadJSONFromAsset(String asset) {
