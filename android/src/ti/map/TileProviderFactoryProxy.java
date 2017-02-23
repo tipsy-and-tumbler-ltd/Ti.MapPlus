@@ -43,8 +43,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 @Kroll.proxy(name = "TileProviderFactory", creatableInModule = MapModule.class)
 public class TileProviderFactoryProxy extends KrollProxy {
-	JSONObject Providers = null;
+	private JSONObject Providers = null;
 	final String LCAT = MapModule.LCAT;
+	Map<String, TileProvider> providerList = new HashMap<String, TileProvider>();;
 
 	public TileProviderFactoryProxy() {
 		super();
@@ -56,8 +57,7 @@ public class TileProviderFactoryProxy extends KrollProxy {
 			in.read(buffer);
 			in.close();
 			Providers = new JSONObject(new String(buffer, "UTF-8"));
-			Map<String, TileProvider> providerList = new HashMap<String, TileProvider>();
-			for (String providerName : getAllProviders()) {
+			for (String providerName : getAllProviderNames()) {
 				providerList
 						.put(providerName,
 								new TileProvider(Providers
@@ -70,7 +70,12 @@ public class TileProviderFactoryProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public String[] getAllProviders() {
+	public String[] getProviderNames() {
+		return getAllProviderNames();
+	}
+
+	@Kroll.method
+	public String[] getAllProviderNames() {
 		if (Providers == null)
 			return null;
 		ArrayList<String> list = new ArrayList<String>();
@@ -90,112 +95,24 @@ public class TileProviderFactoryProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public String getVariant(String p, String v) throws JSONException {
-		if (Providers == null)
-			return null;
-		JSONObject provider;
-		provider = Providers.getJSONObject(p);
-		if (provider.has("variants")) {
-			JSONObject variants = provider.getJSONObject("variants");
-			if (variants.has(v)) {
-				return variants.getString(v);
-			}
-		}
-		return null;
+	public String[] getAllVariantNamesByProvider(String pName) {
+		return providerList.get(pName).getVariantNames();
 	}
 
 	@Kroll.method
-	public Object[] getVariantsOfProvider(String p) {
-		if (Providers == null)
-			return null;
-		ArrayList<String> list = new ArrayList<String>();
-		Iterator<?> pkeys = Providers.keys();
-		while (pkeys.hasNext()) {
-			String pkey = (String) pkeys.next();
-			try {
-				if (Providers.get(pkey) instanceof JSONObject && pkey.equals(p)) {
-					if (Providers.getJSONObject(pkey).has("variants")) {
-						JSONObject variants = Providers.getJSONObject(pkey)
-								.getJSONObject("variants");
-						Iterator<?> vkeys = variants.keys();
-						while (vkeys.hasNext()) {
-							String vkey = (String) vkeys.next();
-							list.add(vkey);
-						}
-					}
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		return list.toArray();
-	}
-
-	private String shuffle(String input) {
-		List<Character> characters = new ArrayList<Character>();
-		for (char c : input.toCharArray()) {
-			characters.add(c);
-		}
-		StringBuilder output = new StringBuilder(input.length());
-		while (characters.size() != 0) {
-			int randPicker = (int) (Math.random() * characters.size());
-			output.append(characters.remove(randPicker));
-		}
-		return output.toString();
+	public String[] getVariantNamesByProvider(String pName) {
+		return getAllVariantNamesByProvider(pName);
 	}
 
 	@Kroll.method
-	public String getEndpoint(String p, String v, boolean randomized) {
-		if (Providers == null)
-			return null;
-		String endpoint = null;
-		if (Providers.has(p)) {
-			try {
-				String ext = "";
-				String subdomains = null;
-				JSONObject provider = Providers.getJSONObject(p);
-				endpoint = provider.getString("url");
-				if (provider.has("options")) {
-					JSONObject options = provider.getJSONObject("options");
-					if (options.has("ext"))
-						ext = options.getString("ext");
-					if (options.has("subdomains")) {
-						subdomains = options.getString("subdomains");
-					}
-				}
-				if (provider.has("variants")) {
-					JSONObject variants = provider.getJSONObject("variants");
-					Iterator<?> vkeys = variants.keys();
-					while (vkeys.hasNext()) {
-						String vkey = (String) vkeys.next();
-						if (vkey.equals(v)) {
-							Object variantO = variants.get(v);
-							if (variantO instanceof String) {
-								endpoint = endpoint.replace("{variant}",
-										(String) variantO);
-							}
-							if (variantO instanceof JSONObject) {
-								JSONObject options = ((JSONObject) variantO)
-										.getJSONObject("options");
-								String variant = options.getString("variant");
-								if (options.has("ext"))
-									ext = options.getString("ext");
-								endpoint = endpoint.replace("{variant}",
-										variant).replace("{ext}", ext);
-								if (subdomains != null)
-									endpoint = endpoint
-											.replace("{s}", shuffle(subdomains)
-													.substring(0, 1));
-							}
+	public KrollDict getTileProvider(String endpoint) {
+		if (endpoint.contains("/")) {
+			String[] pair = endpoint.split("/");
+			return providerList.get(pair[0]).getVariant(pair[1]);
 
-						}
-					}
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+		} else {
+			return providerList.get(endpoint).getVariant(null);
 		}
-		return endpoint;
 	}
 
 	@Kroll.method
@@ -225,8 +142,8 @@ public class TileProviderFactoryProxy extends KrollProxy {
 		double lat = 0f;
 		double lng = 0f;
 		int zoom = 0;
-		String url = getEndpoint(opts.getString("tileProvider"),
-				opts.getString("variant"), true);
+		String url = "";// getEndpoint(opts.getString("tileProvider"),
+		// opts.getString("variant"), true);
 		KrollDict params = new KrollDict();
 		params.put("tileProvider", opts.get("tileProvider"));
 		params.put("variants", opts.get("variant"));

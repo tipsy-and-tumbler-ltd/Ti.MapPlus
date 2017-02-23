@@ -60,7 +60,7 @@ public class MapModule extends KrollModule {
 	public static final String PROPERTY_RADIUS = "radius";
 
 	public static final String PROPERTY_TILE_PROVIDER = "tileProvider";
-	public static final String PROPERTY_TILE_VARIANT = "variant";
+	public static final String PROPERTY_MBTILES = "mbtiles";
 	public static final String LCAT = "TiMap";
 
 	@Kroll.constant

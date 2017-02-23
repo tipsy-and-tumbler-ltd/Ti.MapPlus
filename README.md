@@ -13,8 +13,8 @@ This is the Map Module for Titanium extended by TileOverlays.
 var map = require("ti.map");
 var mapView = map.createView();
 var weatherOverlay =  map.createTileOverlay({
-    tileProvider : "OpenWeatherMap",
-    variant : "RainClassic"
+    tileProvider : "OpenWeatherMap/RainClassic"
+    accessToken : ACCESS_TOKEN, // only for MapBox
     opacity:0.7
 });
 mapView.addTileOverlay(weatherOverlay);
@@ -23,10 +23,14 @@ mapView.addTileOverlay(weatherOverlay);
 For retreiving all possible variants of TileProviders and variants:
 ```javascript
 var providerList = map.createTileProviderFactory();
-providerList.getAllProviders();  // gives list of all
-var variants = providerList.getVariantsOfProvider("Stamen");  // gives list of all variants
-console.log(variants);
-// gives Toner, TonerBackground, TonerHybrid, TonerLines, TonerLabels, TonerLite, Watercolor
+
+providerList.getAllProviderNames(); 
+// ["OpenStreetMap","OpenSeaMap","OpenTopoMap","Thunderforest","OpenMapSurfer","Hydda","MapBox","Stamen","Esri","OpenWeatherMap","FreeMapSK","MtbMap","CartoDB","HikeBike","BasemapAT","NASAGIBS","NLS"]
+
+var variants = factory.getAllVariantNamesByProvider("Stamen");  // gives list of all variants
+//  ["Toner","TonerBackground","TonerHybrid","TonerLines","TonerLabels","TonerLite","Watercolor","Terrain","TerrainBackground","TopOSMRelief","TopOSMFeatures"]
+
+var variant = factory.getVariant("Stamen","WaterColor");
 ```
 
 ### Getting static tiles
@@ -36,8 +40,7 @@ Ti.UI.createImageView({
     width : 256,
     height : 256,
     image : map.getTileUrl({
-        tileProvider : "Stamen",
-        variant : "WaterColor"
+        tileProvider : "Stamen/WaterColor"
         lat : 53.55,
         lng : 10.01,
         zoom : 12
@@ -51,7 +54,7 @@ Ti.UI.createImageView({
 With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downloadosmtiles.pl) you can download all tiles from a region. This script generates folders and download all. After this you can use [mbutil](https://github.com/mapbox/mbutil/) for converting in mbtiles format. This sqlite format is basic for offline maps. Now you can call:
 ```javascript
 var offlineOverlay =  map.createTileOverlay({
-    tileProvider : Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,"germany.mbtiles").nativePath,
+   	mbtiles : Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,"germany.mbtiles").nativePath,
 });
 mapView.addOverlay(offlineOverlay);
 ```

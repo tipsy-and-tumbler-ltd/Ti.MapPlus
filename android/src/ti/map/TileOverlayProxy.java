@@ -9,6 +9,9 @@ package ti.map;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
@@ -29,21 +32,34 @@ public class TileOverlayProxy extends KrollProxy {
 	private final class UrlTileProviderHandler extends UrlTileProvider {
 		private final String endpointOfTileProvider;
 
-		private UrlTileProviderHandler(int arg0, int arg1,
+		private UrlTileProviderHandler(int w, int h,
 				String endpointOfTileProvider) {
-			super(arg0, arg1);
+			super(w, h);
 			this.endpointOfTileProvider = endpointOfTileProvider;
-			Log.d(LCAT, "Endoint:\n====================\n"
-					+ endpointOfTileProvider);
+			Log.d(LCAT, "Endpoint: " + endpointOfTileProvider + "X" + w + "  "
+					+ h);
 		}
 
 		@Override
 		public synchronized URL getTileUrl(int x, int y, int zoom) {
 			URL tileUrl = null;
+			// first the right tile depending on xyz
 			String fUrl = endpointOfTileProvider.replace("{z}", "" + zoom)
 					.replace("{x}", "" + x).replace("{y}", "" + y);
+			Log.d(LCAT, fUrl);
+			// loadbalancing:
+			if (tileProviderParams.containsKey("subdomains")) {
+				Log.d(LCAT, "Loadbalancer started >>>>>>>>>>>>>>>>>>>>>>>>");
+				List<String> subdomainlist = Arrays.asList(tileProviderParams
+						.getStringArray("subdomains"));
+				Collections.shuffle(subdomainlist);
+				String subdomain = subdomainlist.get(0);
+				Log.d(LCAT, subdomain);
+				fUrl = fUrl.replace("{s}", subdomain);
+			}
+			Log.d(LCAT, "URL=" + fUrl);
 			try {
-				tileUrl = new URL(fUrl);
+				tileUrl = new URL(fUrl.replace("{s}", "a"));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
@@ -59,6 +75,8 @@ public class TileOverlayProxy extends KrollProxy {
 	MapBoxOfflineTileProvider mbOfflineTileProvider;
 	private static int TILE_WIDTH = 512;
 	private static int TILE_HEIGHT = TILE_WIDTH;
+	private KrollDict tileProviderParams;
+	private String mbtiles;
 
 	public TileOverlayProxy() {
 		super();
@@ -68,48 +86,46 @@ public class TileOverlayProxy extends KrollProxy {
 	@Override
 	public void handleCreationDict(KrollDict o) {
 		super.handleCreationDict(o);
-		String endpointOfTileProvider = null;
-		String provider = "Thunderforest";
-		String variant = "OpenCycleMap";
+		String providerString = null;
+		Log.d(LCAT,
+				"========================INIT MAP=======================================");
+		Log.d(LCAT, o.toString());
 		if (o.containsKeyAndNotNull(TiC.PROPERTY_OPACITY)) {
 			opacity = TiConvert.toFloat(o.getDouble(TiC.PROPERTY_OPACITY));
 		}
 		if (o.containsKeyAndNotNull(TiC.PROPERTY_ZINDEX)) {
 			zIndex = o.getInt(TiC.PROPERTY_ZINDEX);
 		}
+		if (o.containsKeyAndNotNull(MapModule.PROPERTY_MBTILES)) {
+			mbtiles = o.getString(MapModule.PROPERTY_MBTILES);
+		}
 		if (o.containsKeyAndNotNull(MapModule.PROPERTY_TILE_PROVIDER)) {
-			provider = o.getString(MapModule.PROPERTY_TILE_PROVIDER);
-		}
-		if (o.containsKeyAndNotNull(MapModule.PROPERTY_TILE_VARIANT)) {
-			variant = o.getString(MapModule.PROPERTY_TILE_VARIANT);
-		}
-		if (o.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
-			endpointOfTileProvider = o.getString(TiC.PROPERTY_URL);
-		}
-		if (endpointOfTileProvider == null) {
+			providerString = o.getString(MapModule.PROPERTY_TILE_PROVIDER);
+			Log.d(LCAT, "with " + providerString + " we get:");
 			TileProviderFactoryProxy providerList = new TileProviderFactoryProxy();
-			endpointOfTileProvider = providerList.getEndpoint(provider,
-					variant, true);
+			tileProviderParams = providerList.getTileProvider(providerString);
+			Log.d(LCAT, tileProviderParams.toString());
 		}
-		getTileOverlayOptions(endpointOfTileProvider);
+		if (providerString == null && mbtiles == null) {
+			Log.e(LCAT, "no mbtiles, no tileProvider");
+		} else
+			initTileOverlayOptions();
 	}
 
-	// http://www.survivingwithandroid.com/2015/03/android-google-map-add-weather-data-tile-2.html
-	private TileOverlayOptions getTileOverlayOptions(
-			final String endpointOfTileProvider) {
-
+	private TileOverlayOptions initTileOverlayOptions() {
 		tileOverlayOptions = new TileOverlayOptions();
 		TileProvider tileProvider = null;
-		if (endpointOfTileProvider.substring(0, 4).equals("http")) {
+		if (tileProviderParams.containsKey("endpoint")) {
+			String url = tileProviderParams.getString("endpoint");
+			Log.d(LCAT, "url=" + url);
 			/* Online Tiles */
 			tileProvider = new UrlTileProviderHandler(TILE_WIDTH, TILE_HEIGHT,
-					endpointOfTileProvider);
+					url);
 			tileProvider = new CanvasTileProvider(tileProvider);
 
 			/* offline maps (MBtiles) */
-		} else if (endpointOfTileProvider.substring(0, 4).equals("file")) {
-			File mbtilesFile = new File(endpointOfTileProvider.replace(
-					"file://", ""));
+		} else if (mbtiles != null) {
+			File mbtilesFile = new File(mbtiles.replace("file://", ""));
 			if (mbtilesFile.exists()) {
 				MapBoxOfflineTileProvider mbOfflineTileProvider = new MapBoxOfflineTileProvider(
 						mbtilesFile);
