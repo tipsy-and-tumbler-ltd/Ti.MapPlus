@@ -9,7 +9,9 @@ package ti.map;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,8 +62,11 @@ public class TileOverlayProxy extends KrollProxy {
 				fUrl = fUrl.replace("{s}", subdomain);
 			}
 			Log.d(LCAT, "URL=" + fUrl);
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				tileUrl = new URL(fUrl.replace("{s}", "a"));
+				tileUrl = new URL(fUrl.replace("{s}", "a").replace("{date}",
+						yyyyMMdd.format(cal.getTime())));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}

@@ -1,4 +1,7 @@
 {
+	"NasaCurrentSatelliteGIBS" : {
+		"url" : "https://map1a.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{date}/GoogleMapsCompatible_Level/{z}/{x}/{y}.jpg"
+	},
 	"OpenStreetMap": {
 		"url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 		"options": {
