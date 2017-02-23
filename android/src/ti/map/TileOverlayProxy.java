@@ -49,11 +49,13 @@ public class TileOverlayProxy extends KrollProxy {
 			Log.d(LCAT, fUrl);
 			// loadbalancing:
 			if (tileProviderParams.containsKey("subdomains")) {
+				// same tile => same subdomain
 				Log.d(LCAT, "Loadbalancer started >>>>>>>>>>>>>>>>>>>>>>>>");
 				List<String> subdomainlist = Arrays.asList(tileProviderParams
 						.getStringArray("subdomains"));
+				int ndx = (x + y + zoom) % subdomainlist.size();
 				Collections.shuffle(subdomainlist);
-				String subdomain = subdomainlist.get(0);
+				String subdomain = subdomainlist.get(ndx);
 				Log.d(LCAT, subdomain);
 				fUrl = fUrl.replace("{s}", subdomain);
 			}
@@ -87,9 +89,11 @@ public class TileOverlayProxy extends KrollProxy {
 	public void handleCreationDict(KrollDict o) {
 		super.handleCreationDict(o);
 		String providerString = null;
-		Log.d(LCAT,
-				"========================INIT MAP=======================================");
-		Log.d(LCAT, o.toString());
+		String url;
+
+		if (o.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
+			url = TiConvert.toString(o.getDouble(TiC.PROPERTY_URL));
+		}
 		if (o.containsKeyAndNotNull(TiC.PROPERTY_OPACITY)) {
 			opacity = TiConvert.toFloat(o.getDouble(TiC.PROPERTY_OPACITY));
 		}

@@ -8,6 +8,7 @@ This is the Map Module for Titanium extended by TileOverlays.
 
 
 ##Usage
+
 ### Using of TileOverlays
 ```javascript
 var map = require("ti.map");
@@ -39,7 +40,7 @@ var variant = factory.getVariant("Stamen","WaterColor");
 Ti.UI.createImageView({
     width : 256,
     height : 256,
-    image : map.getTileImage({
+    image : map.createTileProviderFactory().getTileImage({
         tileProvider : "Stamen/WaterColor"
         lat : 53.55,
         lng : 10.01,
@@ -58,6 +59,17 @@ var offlineOverlay =  map.createTileOverlay({
 });
 mapView.addOverlay(offlineOverlay);
 ```
+
+You can use this module for display deep zoom images:
+
+var imageOverlay =  map.createTileOverlay({
+	url : "https://raw.githubusercontent.com/alfarisi/leaflet-deepzoom/master/example/DeepZoomImage/hubble_files/{z}/{x}_{y}.jpg"
+});
+ 
+You can create images with [zoomify](https://www.macupdate.com/app/mac/58319/zoomify/download).
+ 
+Microsofts [DeepzoommImages](https://en.wikipedia.org/wiki/Deep_Zoom) will currently  not supported. 
+
 
 Because the offline Maps work with sqlite database you have to close the connection after map work:
 
@@ -88,4 +100,15 @@ mapView.addHeatmapOverlay(heatMap);
 heatMap.setPoints(/* new data */);
 ```
 
+##Using of encoded polylines
+
+The map.createRoute() point property accepts now encoded polylines.
+
+```javascript
+map.createRoute({
+	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
+	color : "#8f00",
+	width: 5
+});
+```
 
