@@ -65,7 +65,7 @@ public class TileOverlayProxy extends KrollProxy {
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				tileUrl = new URL(fUrl.replace("{s}", "a").replace("{date}",
+				tileUrl = new URL(fUrl.replace("{s}", "a").replace("{time}",
 						yyyyMMdd.format(cal.getTime())));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();

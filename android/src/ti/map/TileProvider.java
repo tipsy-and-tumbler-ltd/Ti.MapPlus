@@ -20,6 +20,7 @@ public class TileProvider {
 	private String ext = "";
 	private int minZoom = 0;
 	private int maxZoom = 19;
+	private String tilematrixset = "";
 	private String attribution = "";
 	private String[] subdomains = {};
 	public String LCAT = "TiMapFact";
@@ -87,6 +88,9 @@ public class TileProvider {
 		}
 		url = url.replace("{ext}", ext);
 		url = url.replace("{variant}", variant.getString("variant"));
+		url = url.replace("{tilematrixset}", tilematrixset);
+		url = url.replace("{maxZoom}", "" + maxZoom);
+
 		variant.remove("ext");
 		variant.remove("variant");
 		variant.put("attribution", attribution);
@@ -103,7 +107,6 @@ public class TileProvider {
 		}
 		variant.put("endpoints", endpoints);
 		variant.put("endpoint", url);
-		variant.remove("subdomains");
 		return variant;
 	}
 
@@ -153,6 +156,10 @@ public class TileProvider {
 					ext = options.getString("ext");
 				if (options.has("attribution"))
 					attribution = options.getString("attribution");
+				if (options.has("maxZoom"))
+					maxZoom = options.getInt("maxZoom");
+				if (options.has("tilematrixset"))
+					tilematrixset = options.getString("tilematrixset");
 				if (options.has("subdomains"))
 					subdomains = getSubdomains(options.get("subdomains"));
 				if (options.has("variant"))
