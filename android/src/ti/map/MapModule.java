@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 @Kroll.module(name = "Map", id = "ti.map")
 public class MapModule extends KrollModule {
+	public static final String PROPERTY_MAP_STYLE = "mapStyle";
 	public static final String PROPERTY_DRAGGABLE = "draggable";
 	public static final String PROPERTY_POINTS = "points";
 	public static final String PROPERTY_TRAFFIC = "traffic";

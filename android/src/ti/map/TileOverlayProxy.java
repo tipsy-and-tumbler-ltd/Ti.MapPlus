@@ -56,7 +56,7 @@ public class TileOverlayProxy extends KrollProxy {
 				List<String> subdomainlist = Arrays.asList(tileProviderParams
 						.getStringArray("subdomains"));
 				int ndx = (x + y + zoom) % subdomainlist.size();
-				Collections.shuffle(subdomainlist);
+				// Collections.shuffle(subdomainlist);
 				String subdomain = subdomainlist.get(ndx);
 				Log.d(LCAT, subdomain);
 				fUrl = fUrl.replace("{s}", subdomain);
@@ -65,7 +65,7 @@ public class TileOverlayProxy extends KrollProxy {
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				tileUrl = new URL(fUrl.replace("{s}", "a").replace("{time}",
+				tileUrl = new URL(fUrl.replace("{s}", "a").replace("{time	}",
 						yyyyMMdd.format(cal.getTime())));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();

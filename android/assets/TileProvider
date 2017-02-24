@@ -379,7 +379,7 @@
 			"ModisTerraLSTDay": {
 				"options": {
 					"variant": "MODIS_Terra_Land_Surface_Temp_Day",
-					"format": "png",
+					"ext": "png",
 					"maxZoom": 7,
 					"opacity": 0.75
 				}
@@ -387,7 +387,7 @@
 			"ModisTerraSnowCover": {
 				"options": {
 					"variant": "MODIS_Terra_Snow_Cover",
-					"format": "png",
+					"ext": "png",
 					"maxZoom": 8,
 					"opacity": 0.75
 				}
@@ -395,7 +395,7 @@
 			"ModisTerraAOD": {
 				"options": {
 					"variant": "MODIS_Terra_Aerosol",
-					"format": "png",
+					"ext": "png",
 					"maxZoom": 6,
 					"opacity": 0.75
 				}
@@ -403,7 +403,7 @@
 			"ModisTerraChlorophyll": {
 				"options": {
 					"variant": "MODIS_Terra_Chlorophyll_A",
-					"format": "png",
+					"ext": "png",
 					"maxZoom": 7,
 					"opacity": 0.75
 				}

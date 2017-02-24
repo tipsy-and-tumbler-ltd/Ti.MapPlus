@@ -18,6 +18,8 @@ import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIFragment;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import ti.map.Shape.Boundary;
 import ti.map.Shape.IShape;
@@ -212,6 +214,9 @@ public class TiUIMapView extends TiUIFragment implements
 		if (d.containsKey(TiC.PROPERTY_MAP_TYPE)) {
 			setMapType(d.getInt(TiC.PROPERTY_MAP_TYPE));
 		}
+		if (d.containsKey(MapModule.PROPERTY_MAP_STYLE)) {
+			setMapStyle(d.getString(MapModule.PROPERTY_MAP_STYLE));
+		}
 		if (d.containsKey(MapModule.PROPERTY_TRAFFIC)) {
 			setTrafficEnabled(d.getBoolean(MapModule.PROPERTY_TRAFFIC));
 		}
@@ -332,6 +337,18 @@ public class TiUIMapView extends TiUIFragment implements
 
 	protected void setMapType(int type) {
 		map.setMapType(type);
+	}
+
+	protected void setMapStyle(String style) {
+		try {
+			@SuppressWarnings("unused")
+			JSONObject dummy = new JSONObject(style);
+			MapStyleOptions styleOptions = new MapStyleOptions(style);
+			map.setMapStyle(styleOptions);
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	protected void setTrafficEnabled(boolean enabled) {
