@@ -346,7 +346,6 @@ public class TiUIMapView extends TiUIFragment implements
 			MapStyleOptions styleOptions = new MapStyleOptions(style);
 			map.setMapStyle(styleOptions);
 		} catch (JSONException e) {
-
 			e.printStackTrace();
 		}
 	}

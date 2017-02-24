@@ -39,7 +39,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 		TiC.PROPERTY_PINCOLOR, MapModule.PROPERTY_CUSTOM_VIEW,
 		TiC.PROPERTY_LEFT_BUTTON, TiC.PROPERTY_LEFT_VIEW,
 		TiC.PROPERTY_RIGHT_BUTTON, TiC.PROPERTY_RIGHT_VIEW,
-		MapModule.PROPERTY_SHOW_INFO_WINDOW, MapModule.PROPERTY_CENTER_OFFSET })
+		MapModule.PROPERTY_SHOW_INFO_WINDOW, MapModule.PROPERTY_CENTER_OFFSET,
+		TiC.PROPERTY_ROTATE })
 public class AnnotationProxy extends KrollProxy {
 	public interface AnnotationDelegate {
 		public void refreshAnnotation(AnnotationProxy annotation);
@@ -74,6 +75,7 @@ public class AnnotationProxy extends KrollProxy {
 	private static final int MSG_SET_LAT = MSG_FIRST_ID + 301;
 	private static final int MSG_SET_DRAGGABLE = MSG_FIRST_ID + 302;
 	private static final int MSG_UPDATE_INFO_WINDOW = MSG_FIRST_ID + 303;
+	private static final int MSG_SET_ROTATE = MSG_FIRST_ID + 304;
 
 	public AnnotationProxy() {
 		super();
@@ -102,7 +104,12 @@ public class AnnotationProxy extends KrollProxy {
 	public boolean handleMessage(Message msg) {
 		AsyncResult result = null;
 		switch (msg.what) {
-
+		case MSG_SET_ROTATE: {
+			result = (AsyncResult) msg.obj;
+			setRotate((Float) result.getArg());
+			result.setResult(null);
+			return true;
+		}
 		case MSG_SET_LON: {
 			result = (AsyncResult) msg.obj;
 			setPosition(TiConvert.toDouble(getProperty(TiC.PROPERTY_LATITUDE)),
@@ -140,6 +147,10 @@ public class AnnotationProxy extends KrollProxy {
 	public void setPosition(double latitude, double longitude) {
 		LatLng position = new LatLng(latitude, longitude);
 		marker.getMarker().setPosition(position);
+	}
+
+	public void setRotate(float rotate) {
+		markerOptions.rotation(rotate);
 	}
 
 	public void processOptions() {
@@ -199,6 +210,10 @@ public class AnnotationProxy extends KrollProxy {
 		if (hasProperty(MapModule.PROPERTY_DRAGGABLE)) {
 			markerOptions.draggable(TiConvert
 					.toBoolean(getProperty(MapModule.PROPERTY_DRAGGABLE)));
+		}
+		if (hasProperty(TiC.PROPERTY_ROTATE)) {
+			markerOptions.rotation(TiConvert
+					.toFloat(getProperty(TiC.PROPERTY_ROTATE)));
 		}
 
 		// customView, image and pincolor must be defined before adding to
