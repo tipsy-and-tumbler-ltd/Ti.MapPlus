@@ -76,7 +76,11 @@ public class RouteProxy extends KrollProxy {
 	public void processOptions() {
 		options = new PolylineOptions();
 		if (hasProperty(MapModule.PROPERTY_PATTERN)) {
-			options.setPattern(processPattern(getProperty(MapModule.PROPERTY_PATTERN)));
+			Object o = getProperty(MapModule.PROPERTY_PATTERN);
+			if (o instanceof PatternItemProxy) {
+				route.setPattern(((PatternItemProxy) o).getPattern());
+			} else
+				route.setPattern(null); // fixed line
 		}
 
 		if (hasProperty(MapModule.PROPERTY_POINTS)) {
@@ -88,6 +92,10 @@ public class RouteProxy extends KrollProxy {
 		if (hasProperty(TiC.PROPERTY_COLOR)) {
 			options.color(TiConvert
 					.toColor((String) getProperty(TiC.PROPERTY_COLOR)));
+		}
+		if (hasProperty(MapModule.PROPERTY_STROKE_COLOR)) {
+			route.setColor(TiConvert
+					.toColor((String) getProperty(MapModule.PROPERTY_STROKE_COLOR)));
 		}
 
 	}
@@ -108,11 +116,6 @@ public class RouteProxy extends KrollProxy {
 				}
 			}
 		}
-	}
-
-	public List<PatternItem> processPattern(Object points) {
-
-		return locationArray;
 	}
 
 	public ArrayList<LatLng> processPoints(Object points, boolean list) {

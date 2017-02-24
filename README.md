@@ -115,16 +115,24 @@ map.createRoute({
 ##Pattern in routes (dotted, dashed …)
 ```javascript
 var patternItem = map.createPatternItem({
-	strokeWidth : 8,
 	dashLength : 20,
 	gapLenght :20,
 	pattern : "- "  // dashed line
 });
-map.createRoute({
+map.addRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	patternItem : patternItem,
-	strokeColor : "red",
-	fillColor : "yellow",
+	color : "red",
+	with : 5,
 });
+map.addRoute({
+	points : "_pa1e3wf~iF~pstzadasdalLnnqC_mqNvxq`@",
+	patternItem : map.createPatternItem({
+		pattern : "."  // dotted line
+	}),
+	color : "orange",
+	with : 5,
+});
+
 ```
 	
