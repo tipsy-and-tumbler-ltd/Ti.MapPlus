@@ -20,6 +20,7 @@ import org.appcelerator.titanium.util.TiConvert;
 import android.os.Message;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
@@ -74,6 +75,10 @@ public class RouteProxy extends KrollProxy {
 
 	public void processOptions() {
 		options = new PolylineOptions();
+		if (hasProperty(MapModule.PROPERTY_PATTERN)) {
+			options.setPattern(processPattern(getProperty(MapModule.PROPERTY_PATTERN)));
+		}
+
 		if (hasProperty(MapModule.PROPERTY_POINTS)) {
 			processPoints(getProperty(MapModule.PROPERTY_POINTS), false);
 		}
@@ -103,6 +108,11 @@ public class RouteProxy extends KrollProxy {
 				}
 			}
 		}
+	}
+
+	public List<PatternItem> processPattern(Object points) {
+
+		return locationArray;
 	}
 
 	public ArrayList<LatLng> processPoints(Object points, boolean list) {
