@@ -12,10 +12,10 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/lib/google-play-services-map.jar"/>
+	<classpathentry kind="lib" path="/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/lib/google-play-services-map-9.6.1.jar"/>
 	<classpathentry kind="lib" path="/opt/android-sdk/extras/android/support/v4/android-support-v4.jar"/>
 	<classpathentry kind="lib" path="/opt/android-sdk/extras/android/support/annotations/android-support-annotations.jar"/>
 	<classpathentry kind="lib" path="/opt/android-sdk/tools/support/annotations.jar"/>
-	<classpathentry kind="lib" path="/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/lib/google-play-services-base.jar"/>
+	<classpathentry kind="lib" path="/Users/fuerst/Documents/APPC_WORKSPACE/ti.map/android/lib/google-play-services-base_9.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
