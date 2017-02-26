@@ -59,6 +59,7 @@ public class MapModule extends KrollModule {
 	public static final String PROPERTY_CIRCLES = "circles";
 	public static final String PROPERTY_CENTER = "center";
 	public static final String PROPERTY_RADIUS = "radius";
+	public static final String PROPERTY_INTERVAL = "interval";
 
 	public static final String PROPERTY_TILE_PROVIDER = "tileProvider";
 	public static final String PROPERTY_MBTILES = "mbtiles";

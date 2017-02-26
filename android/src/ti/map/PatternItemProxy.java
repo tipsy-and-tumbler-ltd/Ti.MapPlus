@@ -7,7 +7,10 @@
 package ti.map;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
@@ -24,6 +27,8 @@ public class PatternItemProxy extends KrollProxy {
 	private float strokeWidth = 5f;
 	private float dashLength = 20f;
 	private float gapLength = 20f;
+	private int interval = 0;
+	private Timer cron;
 
 	private String patternString = ".";
 	private List<PatternItem> patternItems;
@@ -37,6 +42,9 @@ public class PatternItemProxy extends KrollProxy {
 	}
 
 	public void handleCreateDict(KrollDict opts) {
+		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_INTERVAL)) {
+			interval = opts.getInt(MapModule.PROPERTY_INTERVAL);
+		}
 		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_PATTERN)) {
 			patternString = opts.getString(MapModule.PROPERTY_PATTERN);
 		}
@@ -69,7 +77,17 @@ public class PatternItemProxy extends KrollProxy {
 				patternItems.add(new Dash(dashLength));
 				break;
 			}
-
 		}
+		if (interval > 0) {
+			cron.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					Collections.rotate(patternItems, 1);
+				}
+			}, 0, interval);
+		}
+
 	}
+
+	//
 }
