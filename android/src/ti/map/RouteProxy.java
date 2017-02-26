@@ -20,7 +20,7 @@ import org.appcelerator.titanium.util.TiConvert;
 import android.os.Message;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PatternItem;
+//import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
@@ -78,9 +78,10 @@ public class RouteProxy extends KrollProxy {
 		if (hasProperty(MapModule.PROPERTY_PATTERN)) {
 			Object o = getProperty(MapModule.PROPERTY_PATTERN);
 			if (o instanceof PatternItemProxy) {
-				route.setPattern(((PatternItemProxy) o).getPattern());
-			} else
-				route.setPattern(null); // fixed line
+				// route.setPattern(((PatternItemProxy) o).getPattern());
+			} else {
+				// route.setPattern(null); // fixed line
+			}
 		}
 
 		if (hasProperty(MapModule.PROPERTY_POINTS)) {
