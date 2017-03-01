@@ -113,6 +113,8 @@ map.createRoute({
 ```
 
 ##Pattern in routes (dotted, dashed …)
+
+<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/dotted.png" width=400 />
 ```javascript
 var patternItem = map.createPatternItem({
 	dashLength : 20,
