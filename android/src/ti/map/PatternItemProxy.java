@@ -48,7 +48,6 @@ public class PatternItemProxy extends KrollProxy {
 
 	@Override
 	public void handleCreationDict(KrollDict opts) {
-		Log.d(LCAT, opts.toString());
 		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_INTERVAL)) {
 			interval = opts.getInt(MapModule.PROPERTY_INTERVAL);
 		}
@@ -76,6 +75,15 @@ public class PatternItemProxy extends KrollProxy {
 			}
 		}
 		createPattern();
+		if (interval > 0) {
+			cron.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					Collections.rotate(patternItems, 1);
+				}
+			}, 10000, interval);
+
+		}
 	}
 
 	public void createPattern() {
@@ -93,13 +101,6 @@ public class PatternItemProxy extends KrollProxy {
 				break;
 			}
 		}
-		if (interval > 0) {
-			cron.scheduleAtFixedRate(new TimerTask() {
-				@Override
-				public void run() {
-					Collections.rotate(patternItems, 1);
-				}
-			}, 0, interval);
-		}
+
 	}
 }

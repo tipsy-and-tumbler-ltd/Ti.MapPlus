@@ -96,6 +96,7 @@ public class RouteProxy extends KrollProxy {
 	public void processOptions() {
 		options = new PolylineOptions();
 		options.jointType(JointType.ROUND);
+
 		if (hasProperty(MapModule.PROPERTY_PATTERN)) {
 			options.pattern(processPattern(getProperty(MapModule.PROPERTY_PATTERN)));
 		}
@@ -109,7 +110,6 @@ public class RouteProxy extends KrollProxy {
 			options.color(TiConvert
 					.toColor((String) getProperty(TiC.PROPERTY_COLOR)));
 		}
-
 	}
 
 	public void addLocation(Object loc, ArrayList<LatLng> locationArray,

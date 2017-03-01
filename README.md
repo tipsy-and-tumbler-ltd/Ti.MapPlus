@@ -118,13 +118,14 @@ map.createRoute({
 ```javascript
 var patternItem = map.createPatternItem({
 	dashLength : 20,
-	gapLenght :20,
+	gapLength :20,
 	pattern : "- "  // dashed line
 });
 map.addRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	patternItem : patternItem,
 	color : "red",
+	jointType : Map.JOINT_TYPE_BEVEL, // JOINT_TYPE_BEVEL,JOINT_TYPE_ROUND, JOINT_TYPE_DEFAULT,
 	with : 5,
 });
 map.addRoute({
