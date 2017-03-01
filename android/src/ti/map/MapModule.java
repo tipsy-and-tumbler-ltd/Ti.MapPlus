@@ -16,6 +16,7 @@ import org.appcelerator.titanium.TiApplication;
 import android.app.Activity;
 
 import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
@@ -132,7 +133,6 @@ public class MapModule extends KrollModule {
 	@Kroll.method
 	public int isGooglePlayServicesAvailable() {
 		GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-		Activity activity = TiApplication.getAppRootOrCurrentActivity();
 		return googleAPI.isGooglePlayServicesAvailable(TiApplication
 				.getInstance());
 	}
