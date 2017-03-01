@@ -17,10 +17,10 @@ import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.util.TiConvert;
 
-//import com.google.android.gms.maps.model.Dash;
-//import com.google.android.gms.maps.model.Dot;
-//import com.google.android.gms.maps.model.Gap;
-//import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
+import com.google.android.gms.maps.model.PatternItem;
 
 @Kroll.proxy(creatableInModule = MapModule.class)
 public class PatternItemProxy extends KrollProxy {
@@ -32,14 +32,15 @@ public class PatternItemProxy extends KrollProxy {
 
 	private String patternString = ".";
 
-	//
+	List<PatternItem> patternItems;
+
 	public PatternItemProxy() {
 		super();
 	}
 
-	// public List<PatternItem> getPattern() {
-	// return patternItems;
-	// }
+	public List<PatternItem> getPattern() {
+		return patternItems;
+	}
 
 	public void handleCreateDict(KrollDict opts) {
 		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_INTERVAL)) {
@@ -64,17 +65,17 @@ public class PatternItemProxy extends KrollProxy {
 	}
 
 	public void createPattern() {
-		// final List< > patternItems = new ArrayList<PatternItem>();
+		patternItems = new ArrayList<PatternItem>();
 		for (String item : patternString.split("")) {
 			switch (item) {
 			case " ":
-				// patternItems.add(new Gap(gapLength));
+				patternItems.add(new Gap(gapLength));
 				break;
 			case ".":
-				// patternItems.add(new Dot());
+				patternItems.add(new Dot());
 				break;
 			case "-":
-				// patternItems.add(new Dash(dashLength));
+				patternItems.add(new Dash(dashLength));
 				break;
 			}
 		}
@@ -82,7 +83,7 @@ public class PatternItemProxy extends KrollProxy {
 			cron.scheduleAtFixedRate(new TimerTask() {
 				@Override
 				public void run() {
-					// Collections.rotate(patternItems, 1);
+					Collections.rotate(patternItems, 1);
 				}
 			}, 0, interval);
 		}

@@ -127,7 +127,6 @@ public class TileOverlayProxy extends KrollProxy {
 		if (tileProviderParams.containsKey("endpoint")) {
 			String url = tileProviderParams.getString("endpoint");
 			Log.d(LCAT, "url=" + url);
-			/* Online Tiles */
 			tileProvider = new UrlTileProviderHandler(TILE_WIDTH, TILE_HEIGHT,
 					url);
 			tileProvider = new CanvasTileProvider(tileProvider);

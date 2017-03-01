@@ -10,9 +10,12 @@ package ti.map;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import android.app.Activity;
+
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
@@ -120,11 +123,17 @@ public class MapModule extends KrollModule {
 		super();
 	}
 
-	@SuppressWarnings("deprecation")
+	@Kroll.method
+	public int getPlayservicesversionscode() {
+		GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+		return GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+	}
+
 	@Kroll.method
 	public int isGooglePlayServicesAvailable() {
-		return GooglePlayServicesUtil
-				.isGooglePlayServicesAvailable(TiApplication
-						.getAppRootOrCurrentActivity());
+		GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+		Activity activity = TiApplication.getAppRootOrCurrentActivity();
+		return googleAPI.isGooglePlayServicesAvailable(TiApplication
+				.getInstance());
 	}
 }
