@@ -38,8 +38,6 @@ public class TileOverlayProxy extends KrollProxy {
 				String endpointOfTileProvider) {
 			super(w, h);
 			this.endpointOfTileProvider = endpointOfTileProvider;
-			Log.d(LCAT, "Endpoint: " + endpointOfTileProvider + "X" + w + "  "
-					+ h);
 		}
 
 		@Override
@@ -48,20 +46,16 @@ public class TileOverlayProxy extends KrollProxy {
 			// first the right tile depending on xyz
 			String fUrl = endpointOfTileProvider.replace("{z}", "" + zoom)
 					.replace("{x}", "" + x).replace("{y}", "" + y);
-			Log.d(LCAT, fUrl);
 			// loadbalancing:
 			if (tileProviderParams.containsKey("subdomains")) {
 				// same tile => same subdomain
-				Log.d(LCAT, "Loadbalancer started >>>>>>>>>>>>>>>>>>>>>>>>");
 				List<String> subdomainlist = Arrays.asList(tileProviderParams
 						.getStringArray("subdomains"));
 				int ndx = (x + y + zoom) % subdomainlist.size();
 				// Collections.shuffle(subdomainlist);
 				String subdomain = subdomainlist.get(ndx);
-				Log.d(LCAT, subdomain);
 				fUrl = fUrl.replace("{s}", subdomain);
 			}
-			Log.d(LCAT, "URL=" + fUrl);
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
 			try {
@@ -95,7 +89,6 @@ public class TileOverlayProxy extends KrollProxy {
 		super.handleCreationDict(o);
 		String providerString = null;
 		String url;
-
 		if (o.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
 			url = TiConvert.toString(o.getDouble(TiC.PROPERTY_URL));
 		}
@@ -110,10 +103,8 @@ public class TileOverlayProxy extends KrollProxy {
 		}
 		if (o.containsKeyAndNotNull(MapModule.PROPERTY_TILE_PROVIDER)) {
 			providerString = o.getString(MapModule.PROPERTY_TILE_PROVIDER);
-			Log.d(LCAT, "with " + providerString + " we get:");
 			TileProviderFactoryProxy providerList = new TileProviderFactoryProxy();
 			tileProviderParams = providerList.getTileProvider(providerString);
-			Log.d(LCAT, tileProviderParams.toString());
 		}
 		if (providerString == null && mbtiles == null) {
 			Log.e(LCAT, "no mbtiles, no tileProvider");
@@ -126,7 +117,6 @@ public class TileOverlayProxy extends KrollProxy {
 		TileProvider tileProvider = null;
 		if (tileProviderParams.containsKey("endpoint")) {
 			String url = tileProviderParams.getString("endpoint");
-			Log.d(LCAT, "url=" + url);
 			tileProvider = new UrlTileProviderHandler(TILE_WIDTH, TILE_HEIGHT,
 					url);
 			tileProvider = new CanvasTileProvider(tileProvider);
@@ -145,7 +135,6 @@ public class TileOverlayProxy extends KrollProxy {
 		if (tileProvider != null) {
 			tileOverlayOptions.tileProvider(tileProvider)
 					.transparency(1.0f - opacity).zIndex(zIndex);
-			Log.d(LCAT, tileOverlayOptions.toString());
 			return tileOverlayOptions;
 		} else {
 			Log.e(LCAT, "no tileProvider available");

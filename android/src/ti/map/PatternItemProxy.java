@@ -15,6 +15,7 @@ import java.util.TimerTask;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.util.TiConvert;
 
 import com.google.android.gms.maps.model.Dash;
@@ -25,41 +26,54 @@ import com.google.android.gms.maps.model.PatternItem;
 @Kroll.proxy(creatableInModule = MapModule.class)
 public class PatternItemProxy extends KrollProxy {
 	private float strokeWidth = 5f;
-	private float dashLength = 20f;
-	private float gapLength = 20f;
+	private float dashLength = 10f;
+	private float gapLength = 10f;
 	private int interval = 0;
 	private Timer cron;
-
+	final String LCAT = MapModule.LCAT;
 	private String patternString = ".";
-
 	List<PatternItem> patternItems;
 
 	public PatternItemProxy() {
 		super();
 	}
 
-	public List<PatternItem> getPattern() {
+	public List<PatternItem> getPatternItems() {
 		return patternItems;
 	}
 
-	public void handleCreateDict(KrollDict opts) {
+	public void setPatternItems(List<PatternItem> items) {
+		patternItems = items;
+	}
+
+	@Override
+	public void handleCreationDict(KrollDict opts) {
+		Log.d(LCAT, opts.toString());
 		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_INTERVAL)) {
 			interval = opts.getInt(MapModule.PROPERTY_INTERVAL);
 		}
-		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_PATTERN)) {
-			patternString = opts.getString(MapModule.PROPERTY_PATTERN);
+		if (opts.containsKeyAndNotNull("pattern")) {
+			patternString = opts.getString("pattern");
 		}
 		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_STROKE_WIDTH)) {
-			strokeWidth = TiConvert
-					.toFloat(getProperty(MapModule.PROPERTY_STROKE_WIDTH));
+			strokeWidth = TiConvert.toFloat(opts
+					.get(MapModule.PROPERTY_STROKE_WIDTH));
 		}
 		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_DASH_LENGTH)) {
-			dashLength = TiConvert
-					.toFloat(getProperty(MapModule.PROPERTY_DASH_LENGTH));
+			try {
+				dashLength = TiConvert.toFloat(opts
+						.get(MapModule.PROPERTY_DASH_LENGTH));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		if (opts.containsKeyAndNotNull(MapModule.PROPERTY_GAP_LENGTH)) {
-			gapLength = TiConvert
-					.toFloat(getProperty(MapModule.PROPERTY_GAP_LENGTH));
+			try {
+				gapLength = TiConvert.toFloat(opts
+						.get(MapModule.PROPERTY_GAP_LENGTH));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		createPattern();
 	}
@@ -87,8 +101,5 @@ public class PatternItemProxy extends KrollProxy {
 				}
 			}, 0, interval);
 		}
-
 	}
-
-	//
 }

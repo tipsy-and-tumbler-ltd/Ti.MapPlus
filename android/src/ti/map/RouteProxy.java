@@ -13,13 +13,16 @@ import java.util.List;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.AsyncResult;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.common.TiMessenger;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
 
 import android.os.Message;
 
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
@@ -36,6 +39,9 @@ public class RouteProxy extends KrollProxy {
 	private static final int MSG_SET_POINTS = MSG_FIRST_ID + 400;
 	private static final int MSG_SET_COLOR = MSG_FIRST_ID + 401;
 	private static final int MSG_SET_WIDTH = MSG_FIRST_ID + 402;
+	private static final int MSG_SET_PATTERN = MSG_FIRST_ID + 403;
+
+	final String LCAT = MapModule.LCAT;
 
 	public RouteProxy() {
 		super();
@@ -52,7 +58,22 @@ public class RouteProxy extends KrollProxy {
 			result.setResult(null);
 			return true;
 		}
-
+		case MSG_SET_PATTERN: {
+			result = (AsyncResult) msg.obj;
+			Log.d(LCAT, " receive Message");
+			try {
+				List<PatternItem> pattern = processPattern(result.getArg());
+				Log.d(LCAT,
+						".-.-.-.-.-.-.-.-.-.-.-.-Polyline should have nice pattern. enjoy it!");
+				route.setPattern(pattern);
+				Log.d(LCAT,
+						".-.-.-.-.-.-.-.-.-.-.-.-Polyline has now nice pattern. enjoy it!");
+				result.setResult(null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
 		case MSG_SET_COLOR: {
 			result = (AsyncResult) msg.obj;
 			route.setColor((Integer) result.getArg());
@@ -74,15 +95,10 @@ public class RouteProxy extends KrollProxy {
 
 	public void processOptions() {
 		options = new PolylineOptions();
+		options.jointType(JointType.ROUND);
 		if (hasProperty(MapModule.PROPERTY_PATTERN)) {
-			Object o = getProperty(MapModule.PROPERTY_PATTERN);
-			if (o instanceof PatternItemProxy) {
-				route.setPattern(((PatternItemProxy) o).getPattern());
-			} else {
-				route.setPattern(null); // fixed line
-			}
+			options.pattern(processPattern(getProperty(MapModule.PROPERTY_PATTERN)));
 		}
-
 		if (hasProperty(MapModule.PROPERTY_POINTS)) {
 			processPoints(getProperty(MapModule.PROPERTY_POINTS), false);
 		}
@@ -92,10 +108,6 @@ public class RouteProxy extends KrollProxy {
 		if (hasProperty(TiC.PROPERTY_COLOR)) {
 			options.color(TiConvert
 					.toColor((String) getProperty(TiC.PROPERTY_COLOR)));
-		}
-		if (hasProperty(MapModule.PROPERTY_STROKE_COLOR)) {
-			route.setColor(TiConvert
-					.toColor((String) getProperty(MapModule.PROPERTY_STROKE_COLOR)));
 		}
 
 	}
@@ -134,10 +146,25 @@ public class RouteProxy extends KrollProxy {
 			}
 			return locationArray;
 		}
-
 		// single point
 		addLocation(points, locationArray, list);
 		return locationArray;
+	}
+
+	public List<PatternItem> processPattern(Object patternProxy) {
+		Log.d(LCAT, "processPattern >>>>>>>");
+		List<PatternItem> patternItems = null;
+		if (patternProxy instanceof PatternItemProxy) {
+			patternItems = ((PatternItemProxy) patternProxy).getPatternItems();
+			if (patternItems != null) {
+				Log.d(LCAT, patternItems.toString());
+				return patternItems;
+			} else
+				Log.e(LCAT, "patternItems was null");
+		} else
+			Log.e(LCAT,
+					"patternItem is not really a patternItem, cannot add to map …");
+		return patternItems;
 	}
 
 	public PolylineOptions getOptions() {
@@ -164,7 +191,12 @@ public class RouteProxy extends KrollProxy {
 					getMainHandler().obtainMessage(MSG_SET_POINTS), value);
 		}
 
-		else if (name.equals(TiC.PROPERTY_COLOR)) {
+		else if (name.equals(MapModule.PROPERTY_PATTERN)) {
+			Log.d(LCAT, "sendBlockingMainMessage");
+			TiMessenger.sendBlockingMainMessage(
+					getMainHandler().obtainMessage(MSG_SET_PATTERN), value);
+
+		} else if (name.equals(TiC.PROPERTY_COLOR)) {
 			TiMessenger.sendBlockingMainMessage(
 					getMainHandler().obtainMessage(MSG_SET_COLOR),
 					TiConvert.toColor((String) value));

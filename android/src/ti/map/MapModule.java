@@ -10,15 +10,12 @@ package ti.map;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 
-import android.app.Activity;
-
 import com.google.android.gms.common.GoogleApiAvailability;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.JointType;
 
 @Kroll.module(name = "Map", id = "ti.map")
 public class MapModule extends KrollModule {
@@ -67,9 +64,13 @@ public class MapModule extends KrollModule {
 
 	public static final String PROPERTY_TILE_PROVIDER = "tileProvider";
 	public static final String PROPERTY_MBTILES = "mbtiles";
-	public static final String PROPERTY_PATTERN = "pattern";
+	public static final String PROPERTY_PATTERN = "patternItem";
 	public static final String PROPERTY_DASH_LENGTH = "dashLength";
 	public static final String PROPERTY_GAP_LENGTH = "gapLength";
+	public static final String PROPERTY_JOINT_TYPE = "jointType";
+	public static final int JOINT_TYPE_DEFAULT = JointType.DEFAULT;
+	public static final int JOINT_TYPE_BEVEL = JointType.BEVEL;
+	public static final int JOINT_TYPE_ROUND = JointType.ROUND;
 
 	public static final String LCAT = "TiMap";
 
