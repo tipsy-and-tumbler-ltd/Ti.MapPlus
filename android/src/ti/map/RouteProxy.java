@@ -54,16 +54,7 @@ public class RouteProxy extends KrollProxy {
 				kd.put("pattern", marchingAnts.getNextPattern());
 				TiMessenger.sendBlockingMainMessage(getMainHandler()
 						.obtainMessage(MSG_UPDATE_ANTS), kd);
-
 			}
-			// if (polyline != null)
-			// Log.d(LCAT, polyline.getPoints().toString());
-
-			// KrollDict payload = new KrollDict();
-			// payload.put("route", route);
-			// payload.put("pattern", Ants.getNextPattern());
-			// Log.d(LCAT, payload.toString());
-			// Log.d(LCAT, Ants.getNextPattern().toString());
 		}
 	}
 
