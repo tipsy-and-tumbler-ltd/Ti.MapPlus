@@ -137,7 +137,7 @@ mapView.addRoute(Ti.Map.createRoute({
 	with : 5,
 }));
 ```
-###animated routes ("marching ants")
+###Animated routes ("marching ants")
 ```javascript
 var Route = Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
