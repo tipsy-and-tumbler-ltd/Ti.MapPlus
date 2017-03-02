@@ -23,6 +23,7 @@ import org.appcelerator.kroll.common.TiMessenger;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
 
+import android.os.Bundle;
 import android.os.Message;
 
 import com.google.android.gms.maps.model.Dash;
@@ -42,20 +43,26 @@ public class RouteProxy extends KrollProxy {
 
 	/* private inner class for ant handeling */
 	private final class PeriodicallyAntMarching extends TimerTask {
-		MarchingAnts Ants = new MarchingAnts();
-		Polyline route;
-
-		public PeriodicallyAntMarching() {
-			Log.d(LCAT, "PeriodicallyAntMarching");
-			route = RouteProxy.this.route;
-		}
+		final MarchingAnts marchingAnts = new MarchingAnts();
+		final Polyline polyline = RouteProxy.this.route;
 
 		@Override
 		public void run() {
-			KrollDict payload = new KrollDict();
-			payload.put("route", route);
-			payload.put("pattern", Ants.getNextPattern());
-			Log.d(LCAT, payload.toString());
+			if (polyline != null && marchingAnts != null) {
+				KrollDict kd = new KrollDict();
+				kd.put("polyline", polyline);
+				kd.put("pattern", marchingAnts.getNextPattern());
+				TiMessenger.sendBlockingMainMessage(getMainHandler()
+						.obtainMessage(MSG_UPDATE_ANTS), kd);
+
+			}
+			// if (polyline != null)
+			// Log.d(LCAT, polyline.getPoints().toString());
+
+			// KrollDict payload = new KrollDict();
+			// payload.put("route", route);
+			// payload.put("pattern", Ants.getNextPattern());
+			// Log.d(LCAT, payload.toString());
 			// Log.d(LCAT, Ants.getNextPattern().toString());
 		}
 	}
@@ -74,7 +81,7 @@ public class RouteProxy extends KrollProxy {
 
 	final String LCAT = MapModule.LCAT;
 
-	private Polyline route;
+	public Polyline route;
 
 	private Timer cron = new Timer();
 
@@ -121,9 +128,9 @@ public class RouteProxy extends KrollProxy {
 		case MSG_UPDATE_ANTS:
 			result = (AsyncResult) msg.obj;
 			KrollDict pl = (KrollDict) (result.getArg());
-			Polyline route = (Polyline) (pl.get("route"));
+			Polyline polyline = (Polyline) (pl.get("polyline"));
 			List<PatternItem> pattern = (List<PatternItem>) (pl.get("pattern"));
-			route.setPattern(pattern);
+			polyline.setPattern(pattern);
 			result.setResult(null);
 			return true;
 		case MSG_SET_ANIMATED:
@@ -131,13 +138,6 @@ public class RouteProxy extends KrollProxy {
 			animated = (boolean) (result.getArg());
 			result.setResult(null);
 			return true;
-			/*
-			 * patternList = (ArrayList<List<PatternItem>>) (payload
-			 * .get("patternList")); route = (Polyline) (payload.get("route"));
-			 * Collections.rotate(patternList, 1);
-			 * route.setPattern(patternList.get(0));
-			 */
-
 		default: {
 			return super.handleMessage(msg);
 		}
@@ -145,11 +145,12 @@ public class RouteProxy extends KrollProxy {
 	}
 
 	public void initMarchingAnts() {
-		if (!animated)
-			return;
-		int period = 200;
-		int delay = 200;
-		cron.scheduleAtFixedRate(new PeriodicallyAntMarching(), delay, period);
+		if (animated) {
+			int period = 200;
+			int delay = 200;
+			cron.scheduleAtFixedRate(new PeriodicallyAntMarching(), delay,
+					period);
+		}
 	}
 
 	public void processOptions() {
