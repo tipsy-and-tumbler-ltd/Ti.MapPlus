@@ -142,9 +142,12 @@ var Route = Ti.Map.createRoute({
 	color : "red",
 	with : 5,
 });
-Route.startMarchingAnts();
 mapView.addRoute(Route);
-
+Route.start({
+	type : Ti.Map.TYPE_MARCHING_ANTS
+});
+// later:
+Route.stop();
 
 ```
 ##Custome styles maps

@@ -71,6 +71,7 @@ public class MapModule extends KrollModule {
 	public static final int JOINT_TYPE_DEFAULT = JointType.DEFAULT;
 	public static final int JOINT_TYPE_BEVEL = JointType.BEVEL;
 	public static final int JOINT_TYPE_ROUND = JointType.ROUND;
+	public static final int TYPE_MARCHING_ANTS = 1;
 
 	public static final String LCAT = "TiMap";
 

@@ -29,7 +29,6 @@ public class PatternItemProxy extends KrollProxy {
 	private float dashLength = 10f;
 	private float gapLength = 10f;
 	private int interval = 0;
-	private Timer cron;
 	final String LCAT = MapModule.LCAT;
 	private String patternString = ".";
 	List<PatternItem> patternItems;
@@ -75,15 +74,7 @@ public class PatternItemProxy extends KrollProxy {
 			}
 		}
 		createPattern();
-		if (interval > 0) {
-			cron.scheduleAtFixedRate(new TimerTask() {
-				@Override
-				public void run() {
-					Collections.rotate(patternItems, 1);
-				}
-			}, 10000, interval);
 
-		}
 	}
 
 	public void createPattern() {
@@ -101,6 +92,5 @@ public class PatternItemProxy extends KrollProxy {
 				break;
 			}
 		}
-
 	}
 }
