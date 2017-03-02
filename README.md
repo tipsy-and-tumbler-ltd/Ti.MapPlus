@@ -119,23 +119,32 @@ map.createRoute({
 var patternItem = map.createPatternItem({
 	dashLength : 20,
 	gapLength :20,
-	pattern : "- "  // dashed line
+	pattern : "-"  // dashed line
 });
-map.addRoute({
+mapView.addRoute(map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	patternItem : patternItem,
 	color : "red",
 	jointType : Map.JOINT_TYPE_BEVEL, // JOINT_TYPE_BEVEL,JOINT_TYPE_ROUND, JOINT_TYPE_DEFAULT,
 	with : 5,
-});
-map.addRoute({
+}));
+mapView.addRoute(map.createRoute({
 	points : "_pa1e3wf~iF~pstzadasdalLnnqC_mqNvxq`@",
 	patternItem : map.createPatternItem({
 		pattern : "."  // dotted line
 	}),
 	color : "orange",
 	with : 5,
+}));
+
+var Route = map.createRoute({
+	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
+	color : "red",
+	with : 5,
 });
+Route.startMarchingAnts();
+mapView.addRoute(Route);
+
 
 ```
 ##Custome styles maps

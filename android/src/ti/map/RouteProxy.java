@@ -60,14 +60,9 @@ public class RouteProxy extends KrollProxy {
 		}
 		case MSG_SET_PATTERN: {
 			result = (AsyncResult) msg.obj;
-			Log.d(LCAT, " receive Message");
 			try {
 				List<PatternItem> pattern = processPattern(result.getArg());
-				Log.d(LCAT,
-						".-.-.-.-.-.-.-.-.-.-.-.-Polyline should have nice pattern. enjoy it!");
 				route.setPattern(pattern);
-				Log.d(LCAT,
-						".-.-.-.-.-.-.-.-.-.-.-.-Polyline has now nice pattern. enjoy it!");
 				result.setResult(null);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -96,7 +91,10 @@ public class RouteProxy extends KrollProxy {
 	public void processOptions() {
 		options = new PolylineOptions();
 		options.jointType(JointType.ROUND);
+		if (hasProperty(MapModule.PROPERTY_PATTERN)) {
 
+			options.pattern(processPattern(getProperty(MapModule.PROPERTY_PATTERN)));
+		}
 		if (hasProperty(MapModule.PROPERTY_PATTERN)) {
 			options.pattern(processPattern(getProperty(MapModule.PROPERTY_PATTERN)));
 		}
