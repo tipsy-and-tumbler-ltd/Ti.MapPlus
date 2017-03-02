@@ -11,9 +11,9 @@ This is the Map Module for Titanium extended by TileOverlays.
 
 ### Using of TileOverlays
 ```javascript
-var map = require("ti.map");
-var mapView = map.createView();
-var weatherOverlay =  map.createTileOverlay({
+Ti.Map = require("ti.map");
+var mapView = Ti.Map.createView();
+var weatherOverlay =  Ti.Map.createTileOverlay({
     tileProvider : "OpenWeatherMap/RainClassic"
     accessToken : ACCESS_TOKEN, // only for MapBox
     opacity:0.7
@@ -23,7 +23,7 @@ mapView.addTileOverlay(weatherOverlay);
 ### Exploring database of TileProviders
 For retreiving all possible variants of TileProviders and variants:
 ```javascript
-var providerList = map.createTileProviderFactory();
+var providerList = Ti.Map.createTileProviderFactory();
 
 providerList.getAllProviderNames(); 
 // ["OpenStreetMap","OpenSeaMap","OpenTopoMap","Thunderforest","OpenMapSurfer","Hydda","MapBox","Stamen","Esri","OpenWeatherMap","FreeMapSK","MtbMap","CartoDB","HikeBike","BasemapAT","NASAGIBS","NLS"]
@@ -40,7 +40,7 @@ var variant = factory.getVariant("Stamen","WaterColor");
 Ti.UI.createImageView({
     width : 256,
     height : 256,
-    image : map.createTileProviderFactory().getTileImage({
+    image : Ti.Map.createTileProviderFactory().getTileImage({
         tileProvider : "Stamen/WaterColor"
         lat : 53.55,
         lng : 10.01,
@@ -54,7 +54,7 @@ Ti.UI.createImageView({
 
 With the [Perl script](http://search.cpan.org/~rotkraut/Geo-OSM-Tiles-0.01/downloadosmtiles.pl) you can download all tiles from a region. This script generates folders and download all. After this you can use [mbutil](https://github.com/mapbox/mbutil/) for converting in mbtiles format. This sqlite format is basic for offline maps. Now you can call:
 ```javascript
-var offlineOverlay =  map.createTileOverlay({
+var offlineOverlay =  Ti.Map.createTileOverlay({
    	mbtiles : Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,"germany.mbtiles").nativePath,
 });
 mapView.addOverlay(offlineOverlay);
@@ -62,7 +62,7 @@ mapView.addOverlay(offlineOverlay);
 
 You can use this module for display deep zoom images:
 
-var imageOverlay =  map.createTileOverlay({
+var imageOverlay =  Ti.Map.createTileOverlay({
 	url : "https://raw.githubusercontent.com/alfarisi/leaflet-deepzoom/master/example/DeepZoomImage/hubble_files/{z}/{x}_{y}.jpg"
 });
  
@@ -82,7 +82,7 @@ This prevent memory leaks!
 
 <img src="https://i.stack.imgur.com/FkVco.jpg" width=400 />
 ```javascript
-var heatMap  = map.createHeatmapOverlay({
+var heatMap  = Ti.Map.createHeatmapOverlay({
     points : [
         {"lat" : -37.1886, "lng" : 145.708 } ,
         {"lat" : -37.8361, "lng" : 144.845 } ,
@@ -102,10 +102,10 @@ heatMap.setPoints(/* new data */);
 
 ##Using of encoded polylines
 
-The map.createRoute() point property accepts now encoded polylines.
+The Ti.Map.createRoute() point property accepts now encoded polylines.
 
 ```javascript
-map.createRoute({
+Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	color : "#8f00",
 	width: 5
@@ -116,28 +116,28 @@ map.createRoute({
 
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/dotted.png" width=400 />
 ```javascript
-var patternItem = map.createPatternItem({
+var patternItem = Ti.Map.createPatternItem({
 	dashLength : 20,
 	gapLength :20,
 	pattern : "-"  // dashed line
 });
-mapView.addRoute(map.createRoute({
+mapView.addRoute(Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	patternItem : patternItem,
 	color : "red",
-	jointType : Map.JOINT_TYPE_BEVEL, // JOINT_TYPE_BEVEL,JOINT_TYPE_ROUND, JOINT_TYPE_DEFAULT,
+	jointType : Ti.Map.JOINT_TYPE_BEVEL, // JOINT_TYPE_BEVEL,JOINT_TYPE_ROUND, JOINT_TYPE_DEFAULT,
 	with : 5,
 }));
-mapView.addRoute(map.createRoute({
+mapView.addRoute(Ti.Map.createRoute({
 	points : "_pa1e3wf~iF~pstzadasdalLnnqC_mqNvxq`@",
-	patternItem : map.createPatternItem({
+	patternItem : Ti.Map.createPatternItem({
 		pattern : "."  // dotted line
 	}),
 	color : "orange",
 	with : 5,
 }));
 
-var Route = map.createRoute({
+var Route = Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	color : "red",
 	with : 5,
@@ -154,12 +154,12 @@ You can use the same json as for web. Here is the [wizard to do this](https://ma
 ###Usage
 
 ```javascript
-var map = require("ti.map");
-var mapView = map.createView({
+Ti.Map = require("ti.map");
+var mapView = Ti.Map.createView({
 	mapStyle : JSONSTRING,
 	region: {
 	},
-	mapType : map.MAP_TYPE_NORMAL
+	mapType : Ti.Map.MAP_TYPE_NORMAL
 });
 ```
 
