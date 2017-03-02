@@ -136,16 +136,16 @@ mapView.addRoute(Ti.Map.createRoute({
 	color : "orange",
 	with : 5,
 }));
-
+```
+###animated routes ("marching ants")
+```javascript
 var Route = Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	color : "red",
-	animated : true, // "marching ants"
+	animated : true, 
 	with : 5,
 });
 mapView.addRoute(Route);
-// later:
-Route.stop();
 ```
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/ants.gif" width=400/>
 
