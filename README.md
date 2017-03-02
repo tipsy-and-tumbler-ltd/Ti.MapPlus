@@ -140,16 +140,16 @@ mapView.addRoute(Ti.Map.createRoute({
 var Route = Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
 	color : "red",
+	animated : true, // "marching ants"
 	with : 5,
 });
 mapView.addRoute(Route);
-Route.start({
-	type : Ti.Map.TYPE_MARCHING_ANTS
-});
 // later:
 Route.stop();
-
 ```
+<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/ants.gif" width=400/>
+
+
 ##Custome styles maps
 <img src="https://developers.google.com/maps/documentation/android-api/images/style-night.png" width=300/>
 You can use the same json as for web. Here is the [wizard to do this](https://mapstyle.withgoogle.com/)
