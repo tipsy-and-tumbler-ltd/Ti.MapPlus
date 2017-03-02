@@ -146,8 +146,8 @@ public class RouteProxy extends KrollProxy {
 
 	public void initMarchingAnts() {
 		if (animated) {
-			int period = 200;
-			int delay = 200;
+			int period = 100;
+			int delay = 20;
 			cron.scheduleAtFixedRate(new PeriodicallyAntMarching(), delay,
 					period);
 		}
@@ -236,10 +236,9 @@ public class RouteProxy extends KrollProxy {
 		return options;
 	}
 
-	public void setRoute(Polyline r) {
-		route = r;
-		Log.d(LCAT, route.toString());
-		if (animated)
+	public void setRoute(Polyline polyline) {
+		route = polyline;
+		if (route != null && animated == true)
 			initMarchingAnts();
 	}
 
