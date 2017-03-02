@@ -7,6 +7,7 @@ import java.util.List;
 import org.appcelerator.kroll.common.Log;
 
 import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.PatternItem;
 
@@ -17,8 +18,8 @@ public class MarchingAnts {
 
 	public MarchingAnts() {
 		marchingAnts = new ArrayList<List<PatternItem>>();
-		PatternItem DASH = new Dash(5);
-		PatternItem GAP = new Gap(3);
+		final PatternItem DASH = new Dash(5);
+		final PatternItem GAP = new Gap(3);
 		marchingAnts.add(Arrays.asList(GAP, DASH, DASH, DASH, DASH));
 		marchingAnts.add(Arrays.asList(DASH, GAP, DASH, DASH, DASH));
 		marchingAnts.add(Arrays.asList(DASH, DASH, GAP, DASH, DASH));

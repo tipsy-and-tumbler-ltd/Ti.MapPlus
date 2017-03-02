@@ -40,21 +40,16 @@ import com.google.maps.android.PolyUtil;
 		MapModule.PROPERTY_POINTS, TiC.PROPERTY_COLOR, TiC.PROPERTY_WIDTH,
 		TiC.PROPERTY_ANIMATED })
 public class RouteProxy extends KrollProxy {
+	final MarchingAnts marchingAnts = new MarchingAnts();
 
 	/* private inner class for ant handeling */
 	private final class PeriodicallyAntMarching extends TimerTask {
-		final MarchingAnts marchingAnts = new MarchingAnts();
-		final Polyline polyline = RouteProxy.this.route;
 
 		@Override
 		public void run() {
-			if (polyline != null && marchingAnts != null) {
-				KrollDict kd = new KrollDict();
-				kd.put("polyline", polyline);
-				kd.put("pattern", marchingAnts.getNextPattern());
-				TiMessenger.sendBlockingMainMessage(getMainHandler()
-						.obtainMessage(MSG_UPDATE_ANTS), kd);
-			}
+			TiMessenger.sendBlockingMainMessage(
+					getMainHandler().obtainMessage(MSG_UPDATE_ANTS), null);
+
 		}
 	}
 
@@ -118,10 +113,7 @@ public class RouteProxy extends KrollProxy {
 		}
 		case MSG_UPDATE_ANTS:
 			result = (AsyncResult) msg.obj;
-			KrollDict pl = (KrollDict) (result.getArg());
-			Polyline polyline = (Polyline) (pl.get("polyline"));
-			List<PatternItem> pattern = (List<PatternItem>) (pl.get("pattern"));
-			polyline.setPattern(pattern);
+			RouteProxy.this.route.setPattern(marchingAnts.getNextPattern());
 			result.setResult(null);
 			return true;
 		case MSG_SET_ANIMATED:
@@ -137,8 +129,8 @@ public class RouteProxy extends KrollProxy {
 
 	public void initMarchingAnts() {
 		if (animated) {
-			int period = 100;
-			int delay = 20;
+			int period = 50;
+			int delay = 10;
 			cron.scheduleAtFixedRate(new PeriodicallyAntMarching(), delay,
 					period);
 		}
