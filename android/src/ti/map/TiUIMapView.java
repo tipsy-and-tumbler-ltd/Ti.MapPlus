@@ -215,7 +215,7 @@ public class TiUIMapView extends TiUIFragment implements
 			setMapType(d.getInt(TiC.PROPERTY_MAP_TYPE));
 		}
 		if (d.containsKey(MapModule.PROPERTY_MAP_STYLE)) {
-			setMapStyle(d.getString(MapModule.PROPERTY_MAP_STYLE));
+			setStyle(d.getString(MapModule.PROPERTY_MAP_STYLE));
 		}
 		if (d.containsKey(MapModule.PROPERTY_TRAFFIC)) {
 			setTrafficEnabled(d.getBoolean(MapModule.PROPERTY_TRAFFIC));
@@ -337,17 +337,6 @@ public class TiUIMapView extends TiUIFragment implements
 
 	protected void setMapType(int type) {
 		map.setMapType(type);
-	}
-
-	protected void setMapStyle(String style) {
-		try {
-			@SuppressWarnings("unused")
-			JSONObject dummy = new JSONObject(style);
-			MapStyleOptions styleOptions = new MapStyleOptions(style);
-			map.setMapStyle(styleOptions);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 	}
 
 	protected void setTrafficEnabled(boolean enabled) {
@@ -578,7 +567,7 @@ public class TiUIMapView extends TiUIFragment implements
 		if (r.getRoute() == null) {
 			return;
 		}
-
+		r.release();
 		r.getRoute().remove();
 		r.setRoute(null);
 	}

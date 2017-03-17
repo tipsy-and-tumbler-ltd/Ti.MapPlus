@@ -136,6 +136,6 @@ public class MapModule extends KrollModule {
 	public int isGooglePlayServicesAvailable() {
 		GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
 		return googleAPI.isGooglePlayServicesAvailable(TiApplication
-				.getInstance());
+				.getAppRootOrCurrentActivity());
 	}
 }

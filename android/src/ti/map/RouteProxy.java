@@ -113,7 +113,8 @@ public class RouteProxy extends KrollProxy {
 		}
 		case MSG_UPDATE_ANTS:
 			result = (AsyncResult) msg.obj;
-			RouteProxy.this.route.setPattern(marchingAnts.getNextPattern());
+			if (RouteProxy.this.route != null)
+				RouteProxy.this.route.setPattern(marchingAnts.getNextPattern());
 			result.setResult(null);
 			return true;
 		case MSG_SET_ANIMATED:
@@ -270,7 +271,14 @@ public class RouteProxy extends KrollProxy {
 	}
 
 	@Kroll.method
+	public void release() {
+		stopAnimation();
+	}
+
+	@Kroll.method
 	public void stopAnimation() {
+		if (cron != null)
+			cron.cancel();
 		TiMessenger.sendBlockingMainMessage(
 				getMainHandler().obtainMessage(MSG_STOP), null);
 	}
