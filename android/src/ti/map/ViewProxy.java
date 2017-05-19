@@ -18,11 +18,26 @@ import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
+import org.appcelerator.titanium.util.TiSensorHelper;
 import org.appcelerator.titanium.view.TiUIView;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
 
 import ti.map.AnnotationProxy.AnnotationDelegate;
 import android.app.Activity;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.os.Message;
+import android.view.Display;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 
 @Kroll.proxy(creatableInModule = MapModule.class, propertyAccessors = {
 		TiC.PROPERTY_USER_LOCATION, MapModule.PROPERTY_USER_LOCATION_BUTTON,
@@ -30,7 +45,8 @@ import android.os.Message;
 		TiC.PROPERTY_ANIMATE, MapModule.PROPERTY_TRAFFIC, TiC.PROPERTY_STYLE,
 		TiC.PROPERTY_ENABLE_ZOOM_CONTROLS, MapModule.PROPERTY_COMPASS_ENABLED,
 		MapModule.PROPERTY_TILE_PROVIDER, MapModule.PROPERTY_MAP_STYLE })
-public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
+public class ViewProxy extends TiViewProxy implements AnnotationDelegate,
+		SensorEventListener {
 	private static final String TAG = "MapViewProxy";
 	private static final int MSG_FIRST_ID = TiViewProxy.MSG_LAST_ID + 1;
 	private static final int MSG_ADD_ANNOTATION = MSG_FIRST_ID + 500;
@@ -65,6 +81,9 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	private static final int MSG_ADD_HEATMAPOVERLAY = MSG_FIRST_ID + 927;
 	private static final int MSG_REMOVE_HEATMAPOVERLAY = MSG_FIRST_ID + 928;
 	private static final int MSG_REMOVE_ALL_HEATMAPOVERLAYS = MSG_FIRST_ID + 929;
+	private static final int MSG_START_ROTATION = MSG_FIRST_ID + 930;
+	private static final int MSG_STOP_ROTATION = MSG_FIRST_ID + 931;
+
 	private String LCAT = MapModule.LCAT;
 
 	private final ArrayList<RouteProxy> preloadRoutes;
@@ -73,6 +92,9 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 	private final ArrayList<CircleProxy> preloadCircles;
 	private final ArrayList<TileOverlayProxy> preloadTileoverlays;
 	private final ArrayList<HeatmapOverlayProxy> preloadHeatmapoverlays;
+	private float currentAzimut = 0f;
+	private int currentDeviceOrientation = 0;
+	private static SensorManager sensorManager;
 
 	public ViewProxy() {
 		super();
@@ -295,6 +317,14 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 			result = (AsyncResult) msg.obj;
 			handleRemoveAllHeatmapOverlays();
 			result.setResult(null);
+			return true;
+		}
+		case MSG_START_ROTATION: {
+			handleStartRotation();
+			return true;
+		}
+		case MSG_STOP_ROTATION: {
+			handleStopRotation();
 			return true;
 		}
 		default: {
@@ -680,8 +710,8 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 		if (view instanceof TiUIMapView) {
 			TiUIMapView mapView = (TiUIMapView) view;
 			if (mapView.getMap() != null) {
+				Log.d(LCAT, "handleRemoveRoute");
 				mapView.removeRoute(route);
-
 			} else {
 				removePreloadRoute(route);
 			}
@@ -1270,6 +1300,36 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 		}
 	}
 
+	@Kroll.method
+	public void startRotation() {
+		if (TiApplication.isUIThread()) {
+			handleStartRotation();
+		} else {
+			getMainHandler().obtainMessage(MSG_START_ROTATION).sendToTarget();
+		}
+	}
+
+	@Kroll.method
+	public void stopRotation() {
+		if (TiApplication.isUIThread()) {
+			handleStopRotation();
+		} else {
+			getMainHandler().obtainMessage(MSG_STOP_ROTATION).sendToTarget();
+		}
+	}
+
+	private void handleStartRotation() {
+		if (sensorManager == null)
+			sensorManager = TiSensorHelper.getSensorManager();
+		Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+		sensorManager.registerListener(this, sensor,
+				SensorManager.SENSOR_DELAY_GAME);
+	}
+
+	private void handleStopRotation() {
+		sensorManager.unregisterListener(this);
+	}
+
 	public void refreshAnnotation(AnnotationProxy annotation) {
 		TiUIView view = peekView();
 		if (view instanceof TiUIMapView) {
@@ -1296,5 +1356,45 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate {
 
 	public String getApiName() {
 		return "Ti.Map";
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		float azimut = event.values[0];
+
+		Display display = TiApplication.getAppRootOrCurrentActivity()
+				.getWindowManager().getDefaultDisplay();
+
+		int deviceRot = display.getRotation();
+		if (currentDeviceOrientation != deviceRot) {
+			currentDeviceOrientation = deviceRot;
+		}
+		azimut += deviceRot * 90;
+		updateCamera(azimut);
+		currentAzimut = -azimut;
+
+	}
+
+	private void updateCamera(float bearing) {
+		TiUIView view = peekView();
+		if (view instanceof TiUIMapView) {
+			TiUIMapView mapView = (TiUIMapView) view;
+			GoogleMap gmap = mapView.getMap();
+			if (gmap != null) {
+				CameraPosition oldPos = gmap.getCameraPosition();
+				CameraPosition newPos = CameraPosition.builder(oldPos)
+						.bearing(bearing).build();
+				CameraUpdate update = CameraUpdateFactory
+						.newCameraPosition(newPos);
+				gmap.moveCamera(update);
+			} else
+				Log.w(LCAT, "mapView was  null");
+		} else
+			Log.w(LCAT, "view != TiUIMapView");
 	}
 }
