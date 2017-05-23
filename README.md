@@ -3,7 +3,7 @@
 This is the Map Module for Titanium extended by TileOverlays. 
 
 
-<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/watercolor.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112805.png" width=400 /> 
+<img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/watercolor.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/mapstyles.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-112805.png" width=400 /> 
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/Screenshot_20170219-114755.png" width=400 /> <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/osmsea.png" width=400 />
 
 
@@ -77,6 +77,14 @@ Because the offline Maps work with sqlite database you have to close the connect
 offlineOverlay.destroy();
 ```
 This prevent memory leaks!
+
+## Autoratating (following device bearing)
+
+```javascript
+mapView.startRotate();
+// later, if window blurred:
+mapView.stopRotate();
+```
 
 ##Heatmaps
 
@@ -166,193 +174,19 @@ var mapView = Ti.Map.createView({
 });
 ```
 
-Example for JSONSTRING:
+Example for JSONSTRING you can find in root of this module project.
+
+##ClusterManager
+This is still in heavy WIP. First the interface:
 ```javascript
-[
-  {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#212121"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#212121"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.country",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.locality",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#bdbdbd"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#181818"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#1b1b1b"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#2c2c2c"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#8a8a8a"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#373737"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#3c3c3c"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway.controlled_access",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#4e4e4e"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "featureType": "transit",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#000000"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#3d3d3d"
-      }
-    ]
-  }
-]
+
+var clusterItem = Ti.Map.createClusterItem({}): // similar Annotation
+var CM = Ti.Map.createClusterManager({
+    algorithm : Ti.Map.ALGORITHM_GRID_BASE // or Ti.Map.ALGORITHM_NONHIERARCHICAL_DISTANCE_BASED
+    items : [clusterItem]
+});
+
+
+
 
 ```
