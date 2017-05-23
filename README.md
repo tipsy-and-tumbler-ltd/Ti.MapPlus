@@ -70,7 +70,6 @@ You can create images with [zoomify](https://www.macupdate.com/app/mac/58319/zoo
  
 Microsofts [DeepzoommImages](https://en.wikipedia.org/wiki/Deep_Zoom) will currently  not supported. 
 
-
 Because the offline Maps work with sqlite database you have to close the connection after map work:
 
 ```javascript
