@@ -271,15 +271,12 @@ public class RouteProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public void release() {
-		stopAnimation();
-	}
-
-	@Kroll.method
 	public void stopAnimation() {
-		if (cron != null)
-			cron.cancel();
-		TiMessenger.sendBlockingMainMessage(
-				getMainHandler().obtainMessage(MSG_STOP), null);
+		Log.d(LCAT, "stopAnimation");
+		/*
+		 * if (cron != null) { Log.d(LCAT,"cron was active => kill");
+		 * cron.cancel(); } TiMessenger.sendBlockingMainMessage(
+		 * getMainHandler().obtainMessage(MSG_STOP), null);
+		 */
 	}
 }

@@ -92,7 +92,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate,
 	private final ArrayList<CircleProxy> preloadCircles;
 	private final ArrayList<TileOverlayProxy> preloadTileoverlays;
 	private final ArrayList<HeatmapOverlayProxy> preloadHeatmapoverlays;
-	private float currentAzimut = 0f;
+	private float currentBearing = 0f;
 	private int currentDeviceOrientation = 0;
 	private static SensorManager sensorManager;
 
@@ -1365,8 +1365,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate,
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		float azimut = event.values[0];
-
+		float bearing = event.values[0];
 		Display display = TiApplication.getAppRootOrCurrentActivity()
 				.getWindowManager().getDefaultDisplay();
 
@@ -1374,9 +1373,11 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate,
 		if (currentDeviceOrientation != deviceRot) {
 			currentDeviceOrientation = deviceRot;
 		}
-		azimut += deviceRot * 90;
-		updateCamera(azimut);
-		currentAzimut = -azimut;
+		bearing += deviceRot * 90;
+		if (Math.abs(currentBearing - bearing) > 2) {
+			updateCamera(bearing);
+			currentBearing = bearing;
+		}
 
 	}
 
@@ -1388,7 +1389,7 @@ public class ViewProxy extends TiViewProxy implements AnnotationDelegate,
 			if (gmap != null) {
 				CameraPosition oldPos = gmap.getCameraPosition();
 				CameraPosition newPos = CameraPosition.builder(oldPos)
-						.bearing(bearing).build();
+						.bearing(bearing).tilt(45).build();
 				CameraUpdate update = CameraUpdateFactory
 						.newCameraPosition(newPos);
 				gmap.moveCamera(update);

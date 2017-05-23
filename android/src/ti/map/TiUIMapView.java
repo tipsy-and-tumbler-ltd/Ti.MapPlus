@@ -57,7 +57,6 @@ public class TiUIMapView extends TiUIFragment implements
 		GoogleMap.OnMapLongClickListener, GoogleMap.OnMapLoadedCallback,
 		OnMapReadyCallback {
 
-	private static final String TAG = "TiUIMapView";
 	private GoogleMap map;
 	private String LCAT = MapModule.LCAT;
 	protected boolean animate = false;
@@ -558,18 +557,22 @@ public class TiUIMapView extends TiUIFragment implements
 		if (r.getRoute() != null) {
 			return;
 		}
-
 		r.processOptions();
 		r.setRoute(map.addPolyline(r.getOptions()));
 	}
 
-	public void removeRoute(RouteProxy r) {
-		if (r.getRoute() == null) {
+	public void removeRoute(RouteProxy proxy) {
+		Log.d(LCAT, "start removeRoute in TiUIMapView ");
+		if (proxy.getRoute() == null) {
+			Log.w(LCAT, "proxy.getRoute was null, cannot remove");
 			return;
 		}
-		r.release();
-		r.getRoute().remove();
-		r.setRoute(null);
+		Log.d(LCAT, "try to release");
+		proxy.stopAnimation();
+		Log.d(LCAT, "route released");
+		proxy.getRoute().remove();
+		Log.d(LCAT, "route removed, => set to null");
+		proxy.setRoute(null);
 	}
 
 	/**
@@ -853,7 +856,7 @@ public class TiUIMapView extends TiUIFragment implements
 	public boolean onMarkerClick(Marker marker) {
 		AnnotationProxy annoProxy = getProxyByMarker(marker);
 		if (annoProxy == null) {
-			Log.e(TAG, "Marker can not be found, click event won't fired.",
+			Log.e(LCAT, "Marker can not be found, click event won't fired.",
 					Log.DEBUG_MODE);
 			return false;
 		} else if (selectedAnnotation != null
@@ -957,7 +960,7 @@ public class TiUIMapView extends TiUIFragment implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
-		Log.d(TAG, "The annotation is dragged.", Log.DEBUG_MODE);
+		Log.d(LCAT, "The annotation is dragged.", Log.DEBUG_MODE);
 	}
 
 	@Override
