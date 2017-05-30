@@ -214,6 +214,8 @@ public class TiUIMapView extends TiUIFragment implements
 			setMapType(d.getInt(TiC.PROPERTY_MAP_TYPE));
 		}
 		if (d.containsKey(MapModule.PROPERTY_MAP_STYLE)) {
+			Log.d(LCAT, MapModule.PROPERTY_MAP_STYLE + " found");
+			setMapType(GoogleMap.MAP_TYPE_NORMAL);
 			setStyle(d.getString(MapModule.PROPERTY_MAP_STYLE));
 		}
 		if (d.containsKey(MapModule.PROPERTY_TRAFFIC)) {
@@ -298,12 +300,15 @@ public class TiUIMapView extends TiUIFragment implements
 	}
 
 	protected void setStyle(String style) {
+		Log.d(LCAT, "try setStyle");
 		if (style != null && style != "") {
+			Log.d(LCAT, "setStyle style.length=" + style.length());
 			try {
 				boolean success = map.setMapStyle(new MapStyleOptions(style));
 				if (!success) {
-					Log.e("MapsActivityRaw", "Style parsing failed.");
-				}
+					Log.e(LCAT, "MapStyle parsing failed.");
+				} else
+					Log.d(LCAT, "Map successful styled");
 			} catch (Resources.NotFoundException e) {
 				Log.e("MapsActivityRaw", "Can't find style.", e);
 			}
