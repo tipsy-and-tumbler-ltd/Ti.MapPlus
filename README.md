@@ -36,7 +36,6 @@ var variant = factory.getVariant("Stamen","WaterColor");
 
 ### Getting static tiles
 ```javascript
-
 Ti.UI.createImageView({
     width : 256,
     height : 256,
@@ -47,7 +46,6 @@ Ti.UI.createImageView({
         zoom : 12
     })
 });
-
 ```
 
 ### Offline tiles
@@ -61,11 +59,11 @@ mapView.addOverlay(offlineOverlay);
 ```
 
 You can use this module for display deep zoom images:
-
+```javascript
 var imageOverlay =  Ti.Map.createTileOverlay({
 	url : "https://raw.githubusercontent.com/alfarisi/leaflet-deepzoom/master/example/DeepZoomImage/hubble_files/{z}/{x}_{y}.jpg"
 });
- 
+ ```
 You can create images with [zoomify](https://www.macupdate.com/app/mac/58319/zoomify/download).
  
 Microsofts [DeepzoommImages](https://en.wikipedia.org/wiki/Deep_Zoom) will currently  not supported. 
@@ -88,6 +86,7 @@ mapView.stopRotate();
 ##Heatmaps
 
 <img src="https://i.stack.imgur.com/FkVco.jpg" width=400 />
+
 ```javascript
 var heatMap  = Ti.Map.createHeatmapOverlay({
     points : [
@@ -119,7 +118,7 @@ Ti.Map.createRoute({
 });
 ```
 
-##Pattern in routes (dotted, dashed …)
+## Pattern in routes (dotted, dashed …)
 
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/dotted.png" width=400 />
 ```javascript
@@ -144,7 +143,7 @@ mapView.addRoute(Ti.Map.createRoute({
 	with : 5,
 }));
 ```
-###Animated routes ("marching ants")
+### Animated routes ("marching ants")
 ```javascript
 var Route = Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
@@ -157,7 +156,7 @@ mapView.addRoute(Route);
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/ants.gif" width=400/>
 
 
-##Custome styles maps
+## Custome styles maps
 <img src="https://developers.google.com/maps/documentation/android-api/images/style-night.png" width=300/>
 You can use the same json as for web. Here is the [wizard to do this](https://mapstyle.withgoogle.com/)
 
@@ -175,7 +174,7 @@ var mapView = Ti.Map.createView({
 
 Example for JSONSTRING you can find in root of this module project.
 
-##ClusterManager
+## ClusterManager
 This is still in heavy WIP. First the interface:
 ```javascript
 
@@ -184,8 +183,4 @@ var CM = Ti.Map.createClusterManager({
     algorithm : Ti.Map.ALGORITHM_GRID_BASE // or Ti.Map.ALGORITHM_NONHIERARCHICAL_DISTANCE_BASED
     items : [clusterItem]
 });
-
-
-
-
 ```
