@@ -83,7 +83,7 @@ mapView.startRotate();
 mapView.stopRotate();
 ```
 
-##Heatmaps
+## Heatmaps
 
 <img src="https://i.stack.imgur.com/FkVco.jpg" width=400 />
 
@@ -106,7 +106,7 @@ mapView.addHeatmapOverlay(heatMap);
 heatMap.setPoints(/* new data */);
 ```
 
-##Using of encoded polylines
+## Using of encoded polylines
 
 The Ti.Map.createRoute() point property accepts now encoded polylines.
 
@@ -121,6 +121,7 @@ Ti.Map.createRoute({
 ## Pattern in routes (dotted, dashed …)
 
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/dotted.png" width=400 />
+
 ```javascript
 var patternItem = Ti.Map.createPatternItem({
 	dashLength : 20,
@@ -143,7 +144,9 @@ mapView.addRoute(Ti.Map.createRoute({
 	with : 5,
 }));
 ```
+
 ### Animated routes ("marching ants")
+
 ```javascript
 var Route = Ti.Map.createRoute({
 	points : "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
@@ -153,6 +156,7 @@ var Route = Ti.Map.createRoute({
 });
 mapView.addRoute(Route);
 ```
+
 <img src="https://raw.githubusercontent.com/AppWerft/ti.map/master/screens/ants.gif" width=400/>
 
 
@@ -160,7 +164,7 @@ mapView.addRoute(Route);
 <img src="https://developers.google.com/maps/documentation/android-api/images/style-night.png" width=300/>
 You can use the same json as for web. Here is the [wizard to do this](https://mapstyle.withgoogle.com/)
 
-###Usage
+### Usage
 
 ```javascript
 Ti.Map = require("ti.map");
